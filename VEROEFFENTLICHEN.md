@@ -5,13 +5,11 @@ Wie bei GoldKompass: Statt die ZIP von Hand zu packen, baut GitHub sie automatis
 
 ## Einmalig einrichten
 
-1. **GitHub-Repository** `Rottgar85/Scales` anlegen und diesen Ordner als Inhalt hochladen.
+1. **GitHub-Repository:** erledigt, https://github.com/Rottgar85/Scales.
    Die Datei `.pkgmeta` muss direkt im Hauptverzeichnis des Repositorys liegen.
-2. **CurseForge-Projekt anlegen** (curseforge.com → Create Project → World of Warcraft → Addon, Name „Scales“).
-   Alle Texte zum Einfügen (Kurzbeschreibung, Kategorien, Beschreibung Englisch/Deutsch) stehen in
-   `docs/CURSEFORGE.md`, das Logo ist `docs/logo.png`.
-   Die Projekt-ID steht danach rechts auf der Projektseite unter „About Project“.
-   In **allen** `.toc`-Dateien `## X-Curse-Project-ID: 000000` durch diese ID ersetzen.
+2. **CurseForge-Projekt:** erledigt, Projekt-ID **1770935** steht in allen `.toc`-Dateien
+   (`## X-Curse-Project-ID: 1770935`). Die Texte für die Projektseite stehen in `docs/CURSEFORGE.md`,
+   das Logo ist `docs/logo.png`.
    Für Wago zusätzlich: `## X-Wago-ID: abcdef12` (deine Wago-ID)
 3. **API-Schlüssel als GitHub-Secrets hinterlegen** (Repository → Settings → Secrets and variables → Actions):
    - `CF_API_KEY`: auf curseforge.com unter Konto → API Tokens erzeugen
@@ -20,8 +18,8 @@ Wie bei GoldKompass: Statt die ZIP von Hand zu packen, baut GitHub sie automatis
 
 ## Ohne GitHub: ZIP von Hand hochladen
 
-`tools/build-zip.ps1` baut `Scales-<Version>.zip` mit denselben Ausschlüssen wie `.pkgmeta`.
-Auf curseforge.com → Projekt → „Upload File“ die ZIP wählen, alle Spielversionen aus der Tabelle unten
+`powershell -ExecutionPolicy Bypass -File tools\build-zip.ps1` baut `Scales-<Version>.zip` mit denselben Ausschlüssen wie `.pkgmeta`.
+Auf curseforge.com → Projekt 1770935 → „Upload File“ die ZIP wählen, alle Spielversionen aus der Tabelle unten
 angeben, Release-Typ „Release“ und den Abschnitt der Version aus `CHANGELOG.md` als Changelog einfügen.
 
 ## Neue Version veröffentlichen

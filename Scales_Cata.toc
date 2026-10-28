@@ -7,7 +7,7 @@
 ## SavedVariables: ScalesDB
 ## SavedVariablesPerCharacter: ScalesCharDB
 ## IconTexture: Interface\AddOns\Scales\Media\Logo
-## X-Curse-Project-ID: 000000
+## X-Curse-Project-ID: 1770935
 
 Locales\enUS.lua
 Locales\deDE.lua

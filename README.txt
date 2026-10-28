@@ -1,4 +1,4 @@
-Scales 0.1.0 - Author / Autor: Rottgar
+Scales 0.1.0 - Author / Autor: Rottgar · CurseForge: 1770935
 Retail (Midnight), WoW: Forever, Mists Classic, Cata Classic, TBC Anniversary, Classic Era
 
 ENGLISH

@@ -1,5 +1,5 @@
 # Builds Scales-<Version>.zip for a manual CurseForge upload, with the same exclusions as .pkgmeta.
-# Usage: powershell -File tools\build-zip.ps1   (run from anywhere)
+# Usage: powershell -ExecutionPolicy Bypass -File tools\build-zip.ps1   (run from anywhere)
 $ErrorActionPreference = "Stop"
 $root = Split-Path -Parent $PSScriptRoot
 $version = ((Get-Content (Join-Path $root "Scales.toc")) -match '^## Version:')[0] -replace '^## Version:\s*', ''

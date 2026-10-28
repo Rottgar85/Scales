@@ -4,7 +4,7 @@
 
 [English](#english) · [Deutsch](#deutsch)
 
-World of Warcraft addon for Retail (Midnight), WoW: Forever, Mists of Pandaria Classic, Cataclysm Classic, TBC Anniversary and Classic Era · Author: Rottgar
+World of Warcraft addon for Retail (Midnight), WoW: Forever, Mists of Pandaria Classic, Cataclysm Classic, TBC Anniversary and Classic Era · Author: Rottgar · CurseForge project 1770935
 
 ---
 
