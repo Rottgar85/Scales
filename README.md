@@ -24,7 +24,7 @@ World of Warcraft addon for Retail (Midnight), WoW: Forever, Mists of Pandaria C
 
 **Item ratings**
 - Every item tooltip shows whether it is an upgrade or a downgrade compared to what you are wearing, in percent and as a DPS/HPS/EHP change
-- Arrows on item icons in your bags: green up (upgrade), red down (downgrade), gold up (upgrade for another of your specs)
+- Arrows on item icons in your bags: green up (upgrade), red down (downgrade), gold up (upgrade for another of your specs) – also in ElvUI, Bagnon, Baganator, AdiBags, BetterBags and EllesmereUI Bags
 - Rings, trinkets and dual wield are compared against your weaker equipped item; two-handers against main hand plus off hand
 - Trinket effects (Use, Equip, Chance on hit) are estimated for your role
 - Armor you cannot wear is marked; in Retail, items of the wrong armor type never count as upgrades
@@ -63,7 +63,7 @@ Scales uses a fast analytical model, not a full rotation simulation like Simulat
 
 **Item-Bewertung**
 - Jeder Item-Tooltip zeigt, ob das Item besser oder schlechter ist als deine angelegte Ausrüstung, in Prozent und als DPS-/HPS-/EHP-Änderung
-- Pfeile an den Items in den Taschen: grün nach oben (Verbesserung), rot nach unten (Verschlechterung), gold nach oben (Verbesserung für eine andere deiner Spezialisierungen)
+- Pfeile an den Items in den Taschen: grün nach oben (Verbesserung), rot nach unten (Verschlechterung), gold nach oben (Verbesserung für eine andere deiner Spezialisierungen) – auch in ElvUI, Bagnon, Baganator, AdiBags, BetterBags und EllesmereUI Bags
 - Ringe, Schmuckstücke und zwei Einhandwaffen werden mit dem schwächeren angelegten Item verglichen, Zweihandwaffen mit Haupt- plus Nebenhand
 - Effekte von Schmuckstücken (Benutzen, Anlegen, Trefferchance) werden passend zur Rolle geschätzt
 - Nicht tragbare Rüstung wird markiert; in Retail zählt eine falsche Rüstungsklasse nie als Verbesserung

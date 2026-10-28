@@ -4,13 +4,13 @@
 
 **English**
 - Classic (TBC Anniversary, Classic Era, Cata, Mists): the Scales rating now also appears in auction house, vendor, loot, mail and trade tooltips
-- Bag arrows now also appear in Bagnon
+- Bag arrows now also appear in ElvUI, Bagnon, Baganator, AdiBags and BetterBags (besides EllesmereUI Bags and the Blizzard bags); in Baganator the corner can be changed under "Icon corners"
 - A Scales error can no longer break an item tooltip; other addons' hidden scan tooltips are left alone
 - `/scales debug` shows which bag addon is used and the last tooltip error
 
 **Deutsch**
 - Classic (TBC Anniversary, Classic Era, Cata, Mists): Die Scales-Bewertung erscheint jetzt auch in Tooltips von Auktionshaus, Händler, Beute, Post und Handel
-- Taschenpfeile erscheinen jetzt auch in Bagnon
+- Taschenpfeile erscheinen jetzt auch in ElvUI, Bagnon, Baganator, AdiBags und BetterBags (neben EllesmereUI Bags und den Blizzard-Taschen); in Baganator lässt sich die Ecke unter „Icon corners“ ändern
 - Ein Fehler in Scales kann keinen Item-Tooltip mehr kaputt machen; versteckte Scan-Tooltips anderer Addons bleiben unberührt
 - `/scales debug` zeigt, welches Taschen-Addon genutzt wird, und den letzten Tooltip-Fehler
 

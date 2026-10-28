@@ -14,7 +14,7 @@ Dieser Ordner ist gleichzeitig der installierte Addon-Ordner (`_retail_\Interfac
 - `Core/Specs.lua` – alle Specs der Klasse mit Name/Symbol/Gewichten (`ns.Specs.List()`), welche Specs im Tooltip verglichen werden (`ScalesCharDB.tooltipSpecs`). Vergleichsfunktionen in `Compare.lua` nehmen optional `weights`; ohne Angabe gilt die aktive Spec. Caches sind pro Gewichtstabelle.
 - `Core/Stats.lua` (Item- und Charakterwerte), `Core/Simulator.lua` (Modell), `Core/Compare.lua` (Item-Bewertung, Schmuckstücke), `Core/Init.lua` (Events, SavedVariables, Slash-Befehle – wird zuletzt geladen).
 - `UI/Style.lua` – gemeinsames Aussehen im Stil von GoldKompass (dunkles Panel, 2-px-Rand in Cyan, Kopfleiste mit Logo und Goldlinie, eigene Buttons/Checkboxen). Neue Fenster immer darüber bauen.
-- `UI/` – Tooltip, Taschen-Pfeile (grün hoch / rot runter über `Compare.Verdict`), Hauptfenster `/scales`, Optionen, Minimap-Button + Retail-Addon-Fach.
+- `UI/` – Tooltip (TooltipDataProcessor + Setter-Hooks wie Pawn, für Classic), Taschen-Pfeile (Blizzard + Painter je Taschen-Addon in `BagOverlay.lua`: EllesmereUI, Bagnon/BagBrother, ElvUI, Baganator, AdiBags, BetterBags; `/scales debug` zeigt den Stand), Hauptfenster `/scales`, Optionen, Minimap-Button + Retail-Addon-Fach.
 - `Media/` – `Logo.tga` (256×256) und Taschenpfeile (64×64), erzeugt mit den PowerShell-Skripten in `tools/` (32-bit-TGA, unkomprimiert). `docs/logo.png` ist das Bild für CurseForge.
 
 Neue Dateien in **allen** `.toc`-Dateien eintragen, in derselben Reihenfolge.

@@ -41,6 +41,7 @@ Everything updates automatically when your gear, stats, spec or level change. No
 ### Item ratings
 - Every tooltip shows **Upgrade / Downgrade** in percent and the change in DPS, HPS or effective health
 - **Arrows in your bags:** green up = upgrade, red down = downgrade, gold up = upgrade for another of your specs
+- Works with the Blizzard bags, ElvUI, Bagnon, Baganator, AdiBags, BetterBags and EllesmereUI Bags
 - Rings, trinkets and dual wield are compared against your weaker item; two-handers against main hand plus off hand
 - Trinket effects are estimated for your role
 - Armor you cannot wear is marked
@@ -80,6 +81,7 @@ Alles aktualisiert sich automatisch, wenn sich Ausrüstung, Werte, Spezialisieru
 ### Item-Bewertung
 - Jeder Tooltip zeigt **Verbesserung / Verschlechterung** in Prozent und die Änderung bei DPS, HPS oder effektiven Lebenspunkten
 - **Pfeile in den Taschen:** grün nach oben = Verbesserung, rot nach unten = Verschlechterung, gold nach oben = Verbesserung für eine andere deiner Spezialisierungen
+- Funktioniert mit den Blizzard-Taschen, ElvUI, Bagnon, Baganator, AdiBags, BetterBags und EllesmereUI Bags
 - Ringe, Schmuckstücke und zwei Einhandwaffen werden mit dem schwächeren Item verglichen, Zweihandwaffen mit Haupt- plus Nebenhand
 - Schmuckstück-Effekte werden passend zur Rolle geschätzt
 - Nicht tragbare Rüstung wird markiert

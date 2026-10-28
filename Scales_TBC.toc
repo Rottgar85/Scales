@@ -6,7 +6,7 @@
 ## Version: 0.1.3
 ## SavedVariables: ScalesDB
 ## SavedVariablesPerCharacter: ScalesCharDB
-## OptionalDeps: EllesmereUIBags, BagBrother, Bagnon, ElvUI, Baganator, AdiBags, BetterBags
+## OptionalDeps: EllesmereUIBags, BagBrother, Bagnon, Bagnonium, Combuctor, ElvUI, Baganator, AdiBags, BetterBags
 ## IconTexture: Interface\AddOns\Scales\Media\Logo
 ## X-Curse-Project-ID: 1770935
 

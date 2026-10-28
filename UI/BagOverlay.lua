@@ -42,21 +42,25 @@ end
 
 -- Blizzard bags ----------------------------------------------------------------------
 
+-- Kept in our own weak table, so nothing is written onto Blizzard's secure buttons.
+local blizzArrows = setmetatable({}, { __mode = "k" })
+
 local function GetArrow(button)
-  if not button.ScalesArrow then
-    local t = button:CreateTexture(nil, "OVERLAY", nil, 7)
+  local t = blizzArrows[button]
+  if not t then
+    t = button:CreateTexture(nil, "OVERLAY", nil, 7)
     t:SetSize(16, 16)
     t:SetPoint("TOPLEFT", button, "TOPLEFT", 0, 0)
-    button.ScalesArrow = t
+    blizzArrows[button] = t
   end
-  return button.ScalesArrow
+  return t
 end
 
 local function UpdateButton(button, bag, slot)
   if not button then return end
   local verdict = bag and slot and ArrowFor(C.GetContainerItemLink(bag, slot))
   if verdict then ShowArrow(GetArrow(button), verdict)
-  elseif button.ScalesArrow then button.ScalesArrow:Hide() end
+  elseif blizzArrows[button] then blizzArrows[button]:Hide() end
 end
 
 function B.Refresh()
@@ -94,22 +98,32 @@ end
 
 local painters = {}
 
-local function NewPainter(name, point, x, y, size)
-  local p = { name = name, arrows = setmetatable({}, { __mode = "k" }),
-    seen = setmetatable({}, { __mode = "k" }), calls = 0 }
+-- getLink(button), optional: reads the button's current link, so a repaint never uses a stale one.
+local function NewPainter(name, point, x, y, size, getLink)
+  local p = { name = name, calls = 0,
+    arrows = setmetatable({}, { __mode = "k" }),
+    hosts = setmetatable({}, { __mode = "kv" }), -- the host is often the button itself
+    links = setmetatable({}, { __mode = "k" }) }
 
   function p.Paint(button, host, link)
     p.calls = p.calls + 1
-    p.seen[button] = { host = host, link = link }
+    p.hosts[button], p.links[button] = host, link
     local verdict = link and ArrowFor(link)
     local t = p.arrows[button]
     if verdict and not t then
       t = host:CreateTexture(nil, "OVERLAY", nil, 7)
       t:SetSize(size, size)
-      t:SetPoint(point, host, point, x, y)
       p.arrows[button] = t
     end
-    if t then ShowArrow(t, verdict) end
+    if t then
+      -- The addon may move a button between hosts (EllesmereUI grid vs. list view).
+      if t:GetParent() ~= host or not t:GetPoint() then
+        t:SetParent(host)
+        t:ClearAllPoints()
+        t:SetPoint(point, host, point, x, y)
+      end
+      ShowArrow(t, verdict)
+    end
   end
 
   -- A Scales error must never break the bag addon's redraw.
@@ -120,8 +134,15 @@ local function NewPainter(name, point, x, y, size)
   end
 
   function p.Repaint()
-    for button, s in pairs(p.seen) do
-      if button:IsVisible() then p.SafePaint(button, s.host, s.link) end
+    for button, host in pairs(p.hosts) do
+      if host.IsVisible and host:IsVisible() then
+        local link = p.links[button]
+        if getLink then
+          local ok, current = pcall(getLink, button)
+          if ok then link = current end
+        end
+        p.SafePaint(button, host, link)
+      end
     end
   end
 
@@ -140,19 +161,25 @@ local function InitEllesmere()
   end)
 end
 
--- Bagnon and the other BagBrother bags: Item:UpdateUpgradeIcon runs on every item update (Bagnon uses it
--- for Pawn). Bagnon copies all class methods onto each button the first time it builds one (Item:Bind
--- caches the list per class), so this hook runs while Scales loads, right after BagBrother (OptionalDeps)
--- and before any Bagnon window exists. Cached method lists are dropped to be safe.
+-- Bagnon and the other bags built on BagBrother's core (Bagnonium, Combuctor): each includes that core
+-- under its own global name. Item:UpdateUpgradeIcon runs on every item update (they use it for Pawn).
+-- They copy all class methods onto each button the first time they build one (Item:Bind caches the list
+-- per class), so this hook runs while Scales loads, right after them (OptionalDeps) and before any of
+-- their windows exist. Cached method lists are dropped to be safe.
 do
-  local bb = _G.BagBrother
-  if bb and bb.Item and type(bb.Item.UpdateUpgradeIcon) == "function" then
-    local p = NewPainter("Bagnon", "TOPLEFT", 0, 0, 16)
-    hooksecurefunc(bb.Item, "UpdateUpgradeIcon", function(item)
-      p.SafePaint(item, item, item.info and item.info.hyperlink)
-    end)
-    for _, class in pairs(bb) do
-      if type(class) == "table" and rawget(class, "__bindList") then rawset(class, "__bindList", nil) end
+  local hooked = {}
+  for _, global in ipairs({ "Bagnon", "Bagnonium", "Combuctor", "BagBrother" }) do
+    local bb = _G[global]
+    local item = type(bb) == "table" and bb.Item
+    if type(item) == "table" and type(item.UpdateUpgradeIcon) == "function" and not hooked[item] then
+      hooked[item] = true
+      local p = NewPainter(global, "TOPLEFT", 0, 0, 16, function(b) return b.info and b.info.hyperlink end)
+      hooksecurefunc(item, "UpdateUpgradeIcon", function(b)
+        p.SafePaint(b, b, b.info and b.info.hyperlink)
+      end)
+      for _, class in pairs(bb) do
+        if type(class) == "table" and rawget(class, "__bindList") then rawset(class, "__bindList", nil) end
+      end
     end
   end
 end
@@ -162,7 +189,7 @@ local function InitElvUI()
   local E = _G.ElvUI and _G.ElvUI[1]
   local Bags = E and E.GetModule and E:GetModule("Bags", true)
   if not (Bags and type(Bags.UpdateSlot) == "function") then return end
-  local p = NewPainter("ElvUI", "TOPLEFT", 1, -1, 16)
+  local p = NewPainter("ElvUI", "TOPLEFT", 1, -1, 16, function(slot) return slot.itemLink end)
   hooksecurefunc(Bags, "UpdateSlot", function(_, frame, bagID, slotID)
     local bag = frame and frame.Bags and frame.Bags[bagID]
     local slot = bag and bag[slotID]
@@ -203,7 +230,7 @@ local function InitAdiBags()
   local AceAddon = LibStub and LibStub("AceAddon-3.0", true)
   local AceEvent = LibStub and LibStub("AceEvent-3.0", true)
   if not (AceAddon and AceEvent and AceAddon:GetAddon("AdiBags", true)) then return end
-  local p = NewPainter("AdiBags", "TOPLEFT", 0, 0, 16)
+  local p = NewPainter("AdiBags", "TOPLEFT", 0, 0, 16, function(button) return button.itemLink end)
   local listener = {}
   AceEvent:Embed(listener)
   listener:RegisterMessage("AdiBags_UpdateButton", function(_, button)
@@ -217,7 +244,11 @@ local function InitBetterBags()
   local addon = AceAddon and AceAddon:GetAddon("BetterBags", true)
   local events = addon and addon.GetModule and addon:GetModule("Events", true)
   if not (events and events.RegisterMessage) then return end
-  local p = NewPainter("BetterBags", "TOPLEFT", 0, 0, 16)
+  -- Items are Lua tables (not frames); the decoration frame is the host.
+  local p = NewPainter("BetterBags", "TOPLEFT", 0, 0, 16, function(item)
+    local data = item.GetItemData and item:GetItemData()
+    return data and data.itemInfo and data.itemInfo.itemLink
+  end)
   events:RegisterMessage("item/Updated", function(_, item, decoration)
     if not item then return end
     local data = item.GetItemData and item:GetItemData()
@@ -234,7 +265,10 @@ local function Run()
   B.Refresh()
   if pendingFull then
     pendingFull = false
-    for _, p in ipairs(painters) do p.Repaint() end
+    for _, p in ipairs(painters) do
+      local ok, err = pcall(p.Repaint)
+      if not ok then p.lastError = tostring(err) end
+    end
   end
 end
 
