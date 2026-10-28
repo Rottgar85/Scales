@@ -1,8 +1,45 @@
--- Pawn-style arrows on bag item icons: green up for upgrades, red down for downgrades.
+-- Pawn-style arrows on bag item icons: green up for upgrades, red down for downgrades,
+-- gold up for upgrades for another ticked spec. Works with the Blizzard bags and EllesmereUI Bags.
 local ADDON, ns = ...
 local C = ns.C
 local B = {}
 ns.Bags = B
+
+-- Bag addons repaint every slot on each bag change, so results are cached per link
+-- and cleared with every full refresh (re-simulation, option change, item data arriving).
+local cache = {}
+
+local function Compute(link)
+  local verdict, r = ns.Compare.Verdict(link)
+  -- Not better for the active spec, but for another ticked spec: gold arrow (like Pawn).
+  -- No result means no equipment (potions, materials), so the other specs are skipped.
+  if r and not r.unusable and verdict ~= "up" and ScalesDB.bagOther
+    and ns.Compare.UpgradeForOtherSpec(link) then verdict = "other" end
+  if verdict == "up" and not ScalesDB.bagArrows then return nil end
+  if verdict == "down" and not ScalesDB.bagDown then return nil end
+  return verdict
+end
+
+-- "up", "down", "other" or nil for an item link, already filtered by the arrow options.
+local function ArrowFor(link)
+  if not link or not (ScalesDB.bagArrows or ScalesDB.bagDown or ScalesDB.bagOther) then return nil end
+  local cached = cache[link]
+  if cached ~= nil then return cached or nil end
+  local verdict = Compute(link)
+  cache[link] = verdict or false
+  return verdict
+end
+
+local function ShowArrow(t, verdict)
+  if verdict then
+    t:SetTexture(verdict == "up" and ns.Style.ARROW_UP or verdict == "other" and ns.Style.ARROW_OTHER or ns.Style.ARROW_DOWN)
+    t:Show()
+  else
+    t:Hide()
+  end
+end
+
+-- Blizzard bags ----------------------------------------------------------------------
 
 local function GetArrow(button)
   if not button.ScalesArrow then
@@ -16,27 +53,9 @@ end
 
 local function UpdateButton(button, bag, slot)
   if not button then return end
-  local verdict
-  if (ScalesDB.bagArrows or ScalesDB.bagDown or ScalesDB.bagOther) and bag and slot then
-    local link = C.GetContainerItemLink(bag, slot)
-    if link then
-      local r
-      verdict, r = ns.Compare.Verdict(link)
-      -- Not better for the active spec, but for another ticked spec: gold arrow (like Pawn).
-      -- No result means no equipment (potions, materials), so the other specs are skipped.
-      if r and not r.unusable and verdict ~= "up" and ScalesDB.bagOther
-        and ns.Compare.UpgradeForOtherSpec(link) then verdict = "other" end
-    end
-  end
-  if verdict == "up" and not ScalesDB.bagArrows then verdict = nil end
-  if verdict == "down" and not ScalesDB.bagDown then verdict = nil end
-  if verdict then
-    local t = GetArrow(button)
-    t:SetTexture(verdict == "up" and ns.Style.ARROW_UP or verdict == "other" and ns.Style.ARROW_OTHER or ns.Style.ARROW_DOWN)
-    t:Show()
-  elseif button.ScalesArrow then
-    button.ScalesArrow:Hide()
-  end
+  local verdict = bag and slot and ArrowFor(C.GetContainerItemLink(bag, slot))
+  if verdict then ShowArrow(GetArrow(button), verdict)
+  elseif button.ScalesArrow then button.ScalesArrow:Hide() end
 end
 
 function B.Refresh()
@@ -65,11 +84,52 @@ function B.Refresh()
   end
 end
 
-local pending = false
+-- EllesmereUI Bags -------------------------------------------------------------------
+-- Uses its public overlay API (EUI_Bags.RegisterItemOverlayIcon). As it asks, no state is kept on its
+-- secure buttons: our textures hang on btn._textOverlay and are tracked in our own weak table.
+
+local euiArrows = setmetatable({}, { __mode = "k" })
+
+local function PaintEUI(btn, data)
+  local host = btn._textOverlay
+  if not host then return end -- EllesmereUI asks for overlays on _textOverlay only
+  local verdict = data and data.itemLink and ArrowFor(data.itemLink)
+  local t = euiArrows[btn]
+  if verdict and not t then
+    t = host:CreateTexture(nil, "OVERLAY", nil, 7)
+    t:SetSize(16, 16)
+    t:SetPoint("TOPLEFT", host, "TOPLEFT", 1, -1)
+    euiArrows[btn] = t
+  end
+  if t then ShowArrow(t, verdict) end
+end
+
+local function RefreshEUI()
+  local eui = _G.EUI_Bags
+  if eui and eui.RefreshInventory and eui:IsShown() then eui:RefreshInventory() end
+end
+
+-- Queueing ---------------------------------------------------------------------------
+
+local pending, pendingFull = false, false
+local function Run()
+  pending = false
+  B.Refresh()
+  if pendingFull then pendingFull = false; RefreshEUI() end
+end
+
+-- After bag changes: the bag addons repaint on their own, only the Blizzard bags need us.
 function B.QueueRefresh()
   if pending then return end
   pending = true
-  C_Timer.After(0.1, function() pending = false; B.Refresh() end)
+  C_Timer.After(0.1, Run)
+end
+
+-- After a re-simulation, an option change or new item data: results are stale and bag addons have to repaint too.
+function B.QueueFullRefresh()
+  wipe(cache)
+  pendingFull = true
+  B.QueueRefresh()
 end
 
 function B.Init()
@@ -80,4 +140,6 @@ function B.Init()
   if ToggleAllBags then hooksecurefunc("ToggleAllBags", B.QueueRefresh) end
   if OpenAllBags then hooksecurefunc("OpenAllBags", B.QueueRefresh) end
   if ToggleBag then hooksecurefunc("ToggleBag", B.QueueRefresh) end
+  local eui = _G.EUI_Bags
+  if eui and eui.RegisterItemOverlayIcon then eui.RegisterItemOverlayIcon(ADDON, PaintEUI) end
 end

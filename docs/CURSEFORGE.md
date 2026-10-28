@@ -103,10 +103,19 @@ Scales nutzt ein schnelles analytisches Modell, keine vollständige Rotations-Si
 
 ---
 
-## Screenshots (bitte selbst im Spiel aufnehmen)
+## Screenshots
 
-Mit `Druck` im Spiel landen sie in `World of Warcraft\_retail_\Screenshots`. Gut wären:
-1. Tooltip eines Items mit mehreren Spezialisierungs-Zeilen
-2. Geöffnete Taschen mit grünen, roten und goldenen Pfeilen
-3. Das Fenster `/scales` mit Spezialisierungs-Leiste
-4. Das Optionsfenster
+Fertig zugeschnitten in `docs/screenshots/` (nur Item-Kopf und Scales-Teil, ohne andere Addons und ohne
+Charaktername). Auf curseforge.com → Projekt 1770935 → **Images** → „Upload Image“, jeweils mit Titel und
+Beschreibung:
+
+| Datei | Title | Description |
+|---|---|---|
+| `01-tooltip-upgrade.png` | Upgrade in the tooltip / Verbesserung im Tooltip | Green arrow, +% versus your equipped item and the DPS change – plus one line for each of your other specs. · Grüner Pfeil, Prozent ggü. angelegt und DPS-Änderung – dazu eine Zeile pro weiterer Spezialisierung. |
+| `02-tooltip-downgrade.png` | Downgrade at a glance / Verschlechterung auf einen Blick | Red arrow when an item is worse for your active spec and for the other specs. · Roter Pfeil, wenn ein Item für die aktive und die anderen Spezialisierungen schlechter ist. |
+| `03-window.png` | Character window / Charakterfenster | Simulated DPS, HPS or mitigation, key stats and a rating for every equipped item. Click a spec to see its values. · Simulierte DPS/HPS/Mitigation, wichtigste Werte und eine Wertung pro Item. Klick auf eine Spezialisierung zeigt deren Werte. |
+| `04-window-options.png` | Options / Optionen | Tooltip rating, green/red/gold bag arrows, minimap button and language (Auto / English / Deutsch). · Bewertung im Tooltip, grüne/rote/goldene Taschenpfeile, Minimap-Button und Sprache. |
+
+Als „Featured“ (Vorschaubild der Projektseite) eignet sich `01-tooltip-upgrade.png`.
+
+Ein Bild mit Pfeilen in den Taschen fehlt noch: ab Version 0.1.1 erscheinen sie auch in EllesmereUI Bags.

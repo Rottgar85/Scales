@@ -6,12 +6,12 @@ local O = {}
 ns.Options = O
 
 local function Changed()
-  ns.Bags.QueueRefresh()
+  ns.Bags.QueueFullRefresh()
   ns.Minimap.Apply()
 end
 
 local function Create()
-  local f = St.Panel("ScalesOptionsFrame", UIParent, 280, 300)
+  local f = St.Panel("ScalesOptionsFrame", UIParent, 340, 300)
   St.Movable(f)
   St.Header(f, St.TITLE .. " |cffffffff- " .. L.OPTIONS .. "|r")
   f:Hide()
@@ -54,7 +54,7 @@ local function Create()
   f:HookScript("OnShow", MarkLanguage)
 
   local hint = St.Text(f, 11, "GameFontDisableSmall")
-  hint:SetPoint("BOTTOMLEFT", 12, 12); hint:SetWidth(256)
+  hint:SetPoint("BOTTOMLEFT", 12, 12); hint:SetWidth(316)
   hint:SetText(L.OPT_SPEC_HINT)
   O.frame = f
 end

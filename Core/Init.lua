@@ -32,7 +32,7 @@ local function Resim()
   ns.UpdateWeights()
   ns.Compare.InvalidateBudget()
   ns.Sim.Run(ns.weights)
-  ns.Bags.QueueRefresh()
+  ns.Bags.QueueFullRefresh()
   if ns.UI.frame and ns.UI.frame:IsShown() then ns.UI.Refresh() end
 end
 
@@ -67,8 +67,11 @@ ev:SetScript("OnEvent", function(_, event, arg1)
     ns.Bags.Init()
     ns.Minimap.Init()
     Resim()
-  elseif event == "BAG_UPDATE_DELAYED" or event == "GET_ITEM_INFO_RECEIVED" then
+  elseif event == "BAG_UPDATE_DELAYED" then
     ns.Bags.QueueRefresh()
+  elseif event == "GET_ITEM_INFO_RECEIVED" then
+    -- Item stats that were missing before may change a cached arrow.
+    ns.Bags.QueueFullRefresh()
   elseif event == "PLAYER_REGEN_ENABLED" then
     if deferred then QueueResim() end
   elseif event ~= "ADDON_LOADED" then
@@ -92,7 +95,7 @@ SlashCmdList.SCALES = function(msg)
   elseif cmd == "arrows" then
     ScalesDB.bagArrows = not ScalesDB.bagArrows
     ScalesDB.bagDown = ScalesDB.bagArrows
-    ns.Bags.QueueRefresh()
+    ns.Bags.QueueFullRefresh()
   elseif cmd == "options" or cmd == "config" then
     ns.Options.Toggle()
   elseif cmd == "minimap" then

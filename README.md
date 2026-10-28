@@ -6,6 +6,14 @@
 
 World of Warcraft addon for Retail (Midnight), WoW: Forever, Mists of Pandaria Classic, Cataclysm Classic, TBC Anniversary and Classic Era · Author: Rottgar · CurseForge project 1770935
 
+<p align="center">
+  <img src="docs/screenshots/01-tooltip-upgrade.png" width="300" alt="Upgrade in the tooltip">
+  <img src="docs/screenshots/02-tooltip-downgrade.png" width="300" alt="Downgrade in the tooltip">
+</p>
+<p align="center">
+  <img src="docs/screenshots/04-window-options.png" width="620" alt="Character window and options">
+</p>
+
 ---
 
 ## English

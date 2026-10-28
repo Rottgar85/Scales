@@ -4,9 +4,10 @@ local St = ns.Style
 local UI = {}
 ns.UI = UI
 
-local W, H = 380, 520
-local RH, TOP = 18, 184
+local W, H = 380, 540
+local RH, TOP = 18, 196
 local SB = 32 -- height of the spec bar below the header
+local DT = 12 -- extra room for the two-line stat details
 -- Equipment slots shown in the list (no shirt and tabard; the ranged slot only exists outside Retail).
 local SLOTS = { 1, 2, 3, 15, 5, 9, 10, 6, 7, 8, 11, 12, 13, 14, 16, 17 }
 if not ns.C.isRetail then SLOTS[#SLOTS + 1] = 18 end
@@ -66,14 +67,14 @@ function UI.Create()
   f.details:SetWidth(W - 24)
 
   local sep = f:CreateTexture(nil, "ARTWORK")
-  sep:SetHeight(1); sep:SetPoint("TOPLEFT", 10, -126 - SB); sep:SetPoint("TOPRIGHT", -10, -126 - SB)
+  sep:SetHeight(1); sep:SetPoint("TOPLEFT", 10, -126 - SB - DT); sep:SetPoint("TOPRIGHT", -10, -126 - SB - DT)
   sep:SetColorTexture(St.CYAN[1], St.CYAN[2], St.CYAN[3], 0.4)
 
   f.gearTitle = St.Text(f, 12, "GameFontNormal")
-  f.gearTitle:SetPoint("TOPLEFT", 12, -133 - SB)
+  f.gearTitle:SetPoint("TOPLEFT", 12, -133 - SB - DT)
   f.gearTitle:SetText(L.GEAR)
   f.score = St.Text(f, 12, "GameFontNormal")
-  f.score:SetPoint("TOPRIGHT", -12, -133 - SB); f.score:SetJustifyH("RIGHT")
+  f.score:SetPoint("TOPRIGHT", -12, -133 - SB - DT); f.score:SetJustifyH("RIGHT")
 
   f.rows = {}
   for i = 1, #SLOTS do f.rows[i] = Row(f, i) end
@@ -103,7 +104,7 @@ local function SpecButton(f)
   b.check:SetSize(18, 18); b.check:SetPoint("RIGHT", 0, 0)
   b.check:HookScript("OnClick", function(self)
     ns.Specs.SetInTooltip(b.specIndex, self:GetChecked())
-    ns.Bags.QueueRefresh()
+    ns.Bags.QueueFullRefresh()
   end)
   b.check:SetScript("OnEnter", function(self)
     GameTooltip:SetOwner(self, "ANCHOR_TOP")
@@ -165,7 +166,10 @@ local function StatLine(c, role)
       add(role == "HEALER" and "HEALPOWER" or (c.SP > c.AP and "SP" or "AP"), fmt(role == "HEALER" and c.HEALPOWER or math.max(c.SP, c.AP)))
     end
   end
-  return "|cff99ccdd" .. table.concat(parts, "   ") .. "|r"
+  -- Two values per line, so long names (e.g. German "Vielseitigkeit") never split from their number.
+  local lines = {}
+  for i = 1, #parts, 2 do lines[#lines + 1] = parts[i] .. (parts[i + 1] and ("    " .. parts[i + 1]) or "") end
+  return "|cff99ccdd" .. table.concat(lines, "\n") .. "|r"
 end
 
 function UI.Refresh()

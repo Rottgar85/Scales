@@ -1,5 +1,17 @@
 # Scales Changelog
 
+## 0.1.1
+
+**English**
+- Bag arrows now also appear in EllesmereUI Bags (bags and bank)
+- Character window: the stats are shown on two lines, so no value is split from its name any more
+- Options window is wider, so all texts fit
+
+**Deutsch**
+- Taschenpfeile erscheinen jetzt auch in EllesmereUI Bags (Taschen und Bank)
+- Charakterfenster: Die Werte stehen auf zwei Zeilen, kein Wert wird mehr von seinem Namen getrennt
+- Das Optionsfenster ist breiter, damit alle Texte hineinpassen
+
 ## 0.1.0
 
 **English**
