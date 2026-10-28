@@ -3,7 +3,7 @@
 ## Notes: Simulates your character (DPS/HPS/mitigation) and marks upgrades directly on items. English and German.
 ## Notes-deDE: Simuliert deinen Charakter (DPS/HPS/Mitigation) und zeigt Upgrades direkt an den Items. Deutsch und Englisch.
 ## Author: Rottgar
-## Version: 0.1.1
+## Version: 0.1.2
 ## SavedVariables: ScalesDB
 ## SavedVariablesPerCharacter: ScalesCharDB
 ## OptionalDeps: EllesmereUIBags

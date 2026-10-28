@@ -1,5 +1,15 @@
 # Scales Changelog
 
+## 0.1.2
+
+**English**
+- EllesmereUI Bags: the upgrade arrows are now visible – they sit in the bottom right corner (like Pawn's arrow) instead of under the item level
+- New command `/scales debug` shows what the bag integration sees, to help with bug reports
+
+**Deutsch**
+- EllesmereUI Bags: Die Upgrade-Pfeile sind jetzt sichtbar – sie sitzen unten rechts (wie der Pawn-Pfeil) statt unter der Gegenstandsstufe
+- Neuer Befehl `/scales debug` zeigt, was die Taschen-Anbindung sieht, als Hilfe für Fehlermeldungen
+
 ## 0.1.1
 
 **English**
