@@ -102,8 +102,9 @@ local function PaintEUIInner(btn, data)
   local t = euiArrows[btn]
   if verdict and not t then
     t = host:CreateTexture(nil, "OVERLAY", nil, 7)
-    t:SetSize(16, 16)
-    t:SetPoint("TOPLEFT", host, "TOPLEFT", 1, -1)
+    t:SetSize(18, 18)
+    -- Bottom right, where EllesmereUI puts Pawn's arrow: the top left holds its item level text.
+    t:SetPoint("BOTTOMRIGHT", host, "BOTTOMRIGHT", -1, 1)
     euiArrows[btn] = t
   end
   if t then ShowArrow(t, verdict) end
@@ -165,6 +166,12 @@ function B.Debug(say)
   say(string.format("Paint calls: %d, with item: %d, without overlay frame: %d, arrows: %d",
     stats.paints, stats.withLink, stats.noHost, stats.arrows))
   if stats.lastError then say("Last painter error: " .. stats.lastError) end
+  local made, shownNow = 0, 0
+  for _, t in pairs(euiArrows) do
+    made = made + 1
+    if t:IsVisible() then shownNow = shownNow + 1 end
+  end
+  say(string.format("Arrow textures: %d, visible right now: %d", made, shownNow))
   say("Options: green " .. tostring(ScalesDB.bagArrows) .. ", red " .. tostring(ScalesDB.bagDown)
     .. ", gold " .. tostring(ScalesDB.bagOther) .. ", active scale: " .. tostring(ns.archetype))
   -- First few equipment items in the bags, computed fresh (no cache).
