@@ -1,4 +1,4 @@
-# Gearwise Changelog
+# Scales Changelog
 
 ## 0.1.0
 
@@ -12,10 +12,10 @@
 - Spec bar in the window: click a specialization to see its simulation and item ratings; the tick box decides whether it appears in tooltips
 - Gold arrow in your bags for items that are an upgrade for another ticked spec
 - Options window: tooltip rating, bag arrows and minimap button on or off
-- English and German; the language follows your game client or can be chosen in the options or with `/gearwise language en|de|auto`
+- English and German; the language follows your game client or can be chosen in the options or with `/scales language en|de|auto`
 - Trinket effects (Use, Equip, Chance on hit) are estimated for your role
 - Armor you cannot wear is marked; in Retail, items of the wrong armor type never count as upgrades
-- Window with `/gearwise` (or `/gwise`) and a live preview while hovering items
+- Window with `/scales` and a live preview while hovering items
 - Recalculates after combat instead of during combat, so it never interferes with fights
 
 **Deutsch**
@@ -28,8 +28,8 @@
 - Spezialisierungs-Leiste im Fenster: Klick auf eine Spezialisierung zeigt deren Simulation und Item-Wertungen; das Häkchen legt fest, ob sie im Tooltip erscheint
 - Goldener Pfeil in den Taschen für Items, die für eine andere angehakte Spezialisierung besser sind
 - Optionsfenster: Bewertung im Tooltip, Taschenpfeile und Minimap-Button an oder aus
-- Deutsch und Englisch; die Sprache folgt dem Spielclient oder lässt sich in den Optionen bzw. mit `/gearwise sprache de|en|auto` wählen
+- Deutsch und Englisch; die Sprache folgt dem Spielclient oder lässt sich in den Optionen bzw. mit `/scales sprache de|en|auto` wählen
 - Effekte von Schmuckstücken (Benutzen, Anlegen, Trefferchance) werden passend zu deiner Rolle geschätzt
 - Nicht tragbare Rüstung wird markiert; in Retail zählt eine falsche Rüstungsklasse nie als Verbesserung
-- Fenster mit `/gearwise` (oder `/gwise`) und Live-Vorschau beim Überfahren von Items
+- Fenster mit `/scales` und Live-Vorschau beim Überfahren von Items
 - Rechnet nach dem Kampf neu statt währenddessen und stört so nie im Kampf

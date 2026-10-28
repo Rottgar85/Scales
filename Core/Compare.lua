@@ -134,7 +134,7 @@ function Cmp.IsUpgrade(link, weights)
   if not r or r.unusable or r.same then return false, r end
   -- In Retail, off-type armor is never an upgrade.
   if r.armor == "wrong" and ns.C.isRetail then return false, r end
-  return r.delta > 0.5 and r.pct >= (GearwiseDB.minUpgradePct or 0.5), r
+  return r.delta > 0.5 and r.pct >= (ScalesDB.minUpgradePct or 0.5), r
 end
 
 -- "up", "down" or nil (not equipment, already equipped, not wearable, or within the tolerance).
@@ -143,7 +143,7 @@ function Cmp.Verdict(link, weights)
   if up then return "up", r end
   if not r or r.unusable or r.same or r.empty then return nil, r end
   if r.armor == "wrong" and ns.C.isRetail then return nil, r end
-  if r.delta < -0.5 and r.pct <= -(GearwiseDB.minUpgradePct or 0.5) then return "down", r end
+  if r.delta < -0.5 and r.pct <= -(ScalesDB.minUpgradePct or 0.5) then return "down", r end
   return nil, r
 end
 

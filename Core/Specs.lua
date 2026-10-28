@@ -21,15 +21,15 @@ local function Info(i)
   end
 end
 
--- Number of specs the class has in Gearwise's tables.
+-- Number of specs the class has in Scales's tables.
 function Sp.Count()
   local _, class = UnitClass("player")
   return #(ns.Weights.specMap[class] or {})
 end
 
--- The manual override from /gearwise spec only counts if that spec exists.
+-- The manual override from /scales spec only counts if that spec exists.
 function Sp.ActiveIndex()
-  local o = GearwiseCharDB and GearwiseCharDB.specOverride
+  local o = ScalesCharDB and ScalesCharDB.specOverride
   if o and o >= 1 and o <= Sp.Count() then return o end
   return C.GetSpecIndex()
 end
@@ -54,11 +54,11 @@ function Sp.Invalidate() cache = nil end
 
 -- Specs ticked for the tooltip (per character, default: all).
 function Sp.InTooltip(i)
-  local t = GearwiseCharDB and GearwiseCharDB.tooltipSpecs
+  local t = ScalesCharDB and ScalesCharDB.tooltipSpecs
   return not t or t[i] ~= false
 end
 
 function Sp.SetInTooltip(i, on)
-  GearwiseCharDB.tooltipSpecs = GearwiseCharDB.tooltipSpecs or {}
-  GearwiseCharDB.tooltipSpecs[i] = on and true or false
+  ScalesCharDB.tooltipSpecs = ScalesCharDB.tooltipSpecs or {}
+  ScalesCharDB.tooltipSpecs[i] = on and true or false
 end

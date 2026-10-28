@@ -1,18 +1,18 @@
-# Builds Gearwise-<Version>.zip for a manual CurseForge upload, with the same exclusions as .pkgmeta.
+# Builds Scales-<Version>.zip for a manual CurseForge upload, with the same exclusions as .pkgmeta.
 # Usage: powershell -File tools\build-zip.ps1   (run from anywhere)
 $ErrorActionPreference = "Stop"
 $root = Split-Path -Parent $PSScriptRoot
-$version = ((Get-Content (Join-Path $root "Gearwise.toc")) -match '^## Version:')[0] -replace '^## Version:\s*', ''
+$version = ((Get-Content (Join-Path $root "Scales.toc")) -match '^## Version:')[0] -replace '^## Version:\s*', ''
 $exclude = @(".git", ".github", ".claude", "docs", "tools", "CLAUDE.md", "VEROEFFENTLICHEN.md", "README.md", ".luacheckrc",
   ".pkgmeta", ".gitignore")
 
-$stage = Join-Path ([System.IO.Path]::GetTempPath()) ("gearwise-build-" + [guid]::NewGuid())
-$dest = Join-Path $stage "Gearwise"
+$stage = Join-Path ([System.IO.Path]::GetTempPath()) ("scales-build-" + [guid]::NewGuid())
+$dest = Join-Path $stage "Scales"
 New-Item -ItemType Directory -Force $dest | Out-Null
 Get-ChildItem $root -Force | Where-Object { $exclude -notcontains $_.Name -and $_.Extension -ne ".zip" } |
   ForEach-Object { Copy-Item $_.FullName $dest -Recurse }
 
-$zip = Join-Path $root "Gearwise-$version.zip"
+$zip = Join-Path $root "Scales-$version.zip"
 if (Test-Path $zip) { Remove-Item $zip }
 Add-Type -AssemblyName System.IO.Compression, System.IO.Compression.FileSystem
 # Entries are added one by one with "/" separators; Windows PowerShell 5.1 would otherwise write "\",

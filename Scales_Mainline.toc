@@ -1,16 +1,16 @@
 ## Interface: 120105
-## Title: |cff33ccffGear|r|cffffcc00wise|r
+## Title: |cff33ccffScales|r
 ## Notes: Simulates your character (DPS/HPS/mitigation) and marks upgrades directly on items. English and German.
 ## Notes-deDE: Simuliert deinen Charakter (DPS/HPS/Mitigation) und zeigt Upgrades direkt an den Items. Deutsch und Englisch.
 ## Author: Rottgar
 ## Version: 0.1.0
-## SavedVariables: GearwiseDB
-## SavedVariablesPerCharacter: GearwiseCharDB
-## IconTexture: Interface\AddOns\Gearwise\Media\Logo
+## SavedVariables: ScalesDB
+## SavedVariablesPerCharacter: ScalesCharDB
+## IconTexture: Interface\AddOns\Scales\Media\Logo
 ## X-Curse-Project-ID: 000000
-## AddonCompartmentFunc: Gearwise_OnAddonCompartmentClick
-## AddonCompartmentFuncOnEnter: Gearwise_OnAddonCompartmentEnter
-## AddonCompartmentFuncOnLeave: Gearwise_OnAddonCompartmentLeave
+## AddonCompartmentFunc: Scales_OnAddonCompartmentClick
+## AddonCompartmentFuncOnEnter: Scales_OnAddonCompartmentEnter
+## AddonCompartmentFuncOnLeave: Scales_OnAddonCompartmentLeave
 
 Locales\enUS.lua
 Locales\deDE.lua

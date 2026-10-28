@@ -1,6 +1,6 @@
 local ADDON, ns = ...
 -- German texts. Core/Init.lua copies them into ns.L on a German client or when German was chosen
--- (/gearwise language de); English from enUS.lua stays the fallback for every key.
+-- (/scales language de); English from enUS.lua stays the fallback for every key.
 local L = {}
 ns.LocaleDE = L
 L.UPGRADE = "Verbesserung"
@@ -11,15 +11,15 @@ L.EMPTY_SLOT = "Platz leer - Verbesserung"
 L.DPS = "Schaden pro Sekunde"
 L.HPS = "Heilung pro Sekunde"
 L.MITIGATION = "Verhinderter Schaden"
-L.SCORE = "Gearwise-Wertung"
+L.SCORE = "Scales-Wertung"
 L.SPEC = "Spezialisierung"
 L.ROLE = "Rolle"
-L.TITLE = "Gearwise - Charaktersimulation"
+L.TITLE = "Scales - Charaktersimulation"
 L.EQUIPPED = "Angelegt"
 L.UNUSABLE_ARMOR = "Rüstungsklasse nicht tragbar"
 L.WRONG_ARMOR = "Nicht deine Rüstungsklasse"
 L.PREVIEW = "Wenn angelegt"
-L.HELP = "/gearwise - Fenster öffnen | /gearwise options - Optionen | /gearwise spec <1-4> - Spezialisierung setzen | /gearwise arrows - Taschenpfeile an/aus | /gearwise minimap | /gearwise language en/de/auto | /gearwise reset"
+L.HELP = "/scales - Fenster öffnen | /scales options - Optionen | /scales spec <1-4> - Spezialisierung setzen | /scales arrows - Taschenpfeile an/aus | /scales minimap | /scales language en/de/auto | /scales reset"
 L.OPTIONS = "Optionen"
 L.GEAR = "Ausrüstung"
 L.EMPTY = "leer"
@@ -48,7 +48,7 @@ L.OPT_TOOLTIP = "Bewertung im Item-Tooltip zeigen"
 L.OPT_ARROWS_UP = "Grüner Pfeil an Verbesserungen"
 L.OPT_ARROWS_DOWN = "Roter Pfeil an Verschlechterungen"
 L.OPT_MINIMAP = "Minimap-Button zeigen"
-L.OPT_SPEC_HINT = "Falsche Spezialisierung erkannt? /gearwise spec 1-4 setzt sie, /gearwise reset schaltet zurück auf automatisch."
+L.OPT_SPEC_HINT = "Falsche Spezialisierung erkannt? /scales spec 1-4 setzt sie, /scales reset schaltet zurück auf automatisch."
 L.MM_LEFT = "Linksklick: Fenster öffnen"
 L.MM_RIGHT = "Rechtsklick: Optionen"
 L.MM_DRAG = "Ziehen: Button verschieben"

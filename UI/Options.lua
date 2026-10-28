@@ -11,17 +11,17 @@ local function Changed()
 end
 
 local function Create()
-  local f = St.Panel("GearwiseOptionsFrame", UIParent, 280, 300)
+  local f = St.Panel("ScalesOptionsFrame", UIParent, 280, 300)
   St.Movable(f)
   St.Header(f, St.TITLE .. " |cffffffff- " .. L.OPTIONS .. "|r")
   f:Hide()
 
   local items = {
-    { L.OPT_TOOLTIP, function() return GearwiseDB.tooltip end, function(v) GearwiseDB.tooltip = v end },
-    { L.OPT_ARROWS_UP, function() return GearwiseDB.bagArrows end, function(v) GearwiseDB.bagArrows = v end },
-    { L.OPT_ARROWS_DOWN, function() return GearwiseDB.bagDown end, function(v) GearwiseDB.bagDown = v end },
-    { L.OPT_ARROWS_OTHER, function() return GearwiseDB.bagOther end, function(v) GearwiseDB.bagOther = v end },
-    { L.OPT_MINIMAP, function() return not GearwiseDB.minimap.hide end, function(v) GearwiseDB.minimap.hide = not v end },
+    { L.OPT_TOOLTIP, function() return ScalesDB.tooltip end, function(v) ScalesDB.tooltip = v end },
+    { L.OPT_ARROWS_UP, function() return ScalesDB.bagArrows end, function(v) ScalesDB.bagArrows = v end },
+    { L.OPT_ARROWS_DOWN, function() return ScalesDB.bagDown end, function(v) ScalesDB.bagDown = v end },
+    { L.OPT_ARROWS_OTHER, function() return ScalesDB.bagOther end, function(v) ScalesDB.bagOther = v end },
+    { L.OPT_MINIMAP, function() return not ScalesDB.minimap.hide end, function(v) ScalesDB.minimap.hide = not v end },
   }
   for i, it in ipairs(items) do
     local cb = St.Check(f, it[1], it[2], function(v) it[3](v); Changed() end)
@@ -36,7 +36,7 @@ local function Create()
   local langBtns = {}
   local function MarkLanguage()
     for _, b in ipairs(langBtns) do
-      local c = b.lang == GearwiseDB.language and St.GOLD or St.CYAN
+      local c = b.lang == ScalesDB.language and St.GOLD or St.CYAN
       b:SetBackdropBorderColor(c[1], c[2], c[3], 1)
     end
   end

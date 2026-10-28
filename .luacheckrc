@@ -1,4 +1,4 @@
--- luacheck fuer Gearwise: findet Syntaxfehler und echte Fehler, ignoriert WoW-Globale und Stilfragen
+-- luacheck fuer Scales: findet Syntaxfehler und echte Fehler, ignoriert WoW-Globale und Stilfragen
 std = "lua51"
 max_line_length = false
 allow_defined_top = true

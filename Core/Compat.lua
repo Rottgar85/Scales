@@ -73,13 +73,13 @@ function C.GetTooltipLines(link)
     return out
   end
   if not scanner then
-    scanner = CreateFrame("GameTooltip", "GearwiseScanTooltip", nil, "GameTooltipTemplate")
+    scanner = CreateFrame("GameTooltip", "ScalesScanTooltip", nil, "GameTooltipTemplate")
     scanner:SetOwner(WorldFrame, "ANCHOR_NONE")
   end
   scanner:ClearLines()
   scanner:SetHyperlink(link)
   for i = 1, scanner:NumLines() do
-    local fs = _G["GearwiseScanTooltipTextLeft" .. i]
+    local fs = _G["ScalesScanTooltipTextLeft" .. i]
     local t = fs and fs:GetText()
     if t then out[#out + 1] = t end
   end

@@ -5,37 +5,37 @@ local B = {}
 ns.Bags = B
 
 local function GetArrow(button)
-  if not button.GearwiseArrow then
+  if not button.ScalesArrow then
     local t = button:CreateTexture(nil, "OVERLAY", nil, 7)
     t:SetSize(16, 16)
     t:SetPoint("TOPLEFT", button, "TOPLEFT", 0, 0)
-    button.GearwiseArrow = t
+    button.ScalesArrow = t
   end
-  return button.GearwiseArrow
+  return button.ScalesArrow
 end
 
 local function UpdateButton(button, bag, slot)
   if not button then return end
   local verdict
-  if (GearwiseDB.bagArrows or GearwiseDB.bagDown or GearwiseDB.bagOther) and bag and slot then
+  if (ScalesDB.bagArrows or ScalesDB.bagDown or ScalesDB.bagOther) and bag and slot then
     local link = C.GetContainerItemLink(bag, slot)
     if link then
       local r
       verdict, r = ns.Compare.Verdict(link)
       -- Not better for the active spec, but for another ticked spec: gold arrow (like Pawn).
       -- No result means no equipment (potions, materials), so the other specs are skipped.
-      if r and not r.unusable and verdict ~= "up" and GearwiseDB.bagOther
+      if r and not r.unusable and verdict ~= "up" and ScalesDB.bagOther
         and ns.Compare.UpgradeForOtherSpec(link) then verdict = "other" end
     end
   end
-  if verdict == "up" and not GearwiseDB.bagArrows then verdict = nil end
-  if verdict == "down" and not GearwiseDB.bagDown then verdict = nil end
+  if verdict == "up" and not ScalesDB.bagArrows then verdict = nil end
+  if verdict == "down" and not ScalesDB.bagDown then verdict = nil end
   if verdict then
     local t = GetArrow(button)
     t:SetTexture(verdict == "up" and ns.Style.ARROW_UP or verdict == "other" and ns.Style.ARROW_OTHER or ns.Style.ARROW_DOWN)
     t:Show()
-  elseif button.GearwiseArrow then
-    button.GearwiseArrow:Hide()
+  elseif button.ScalesArrow then
+    button.ScalesArrow:Hide()
   end
 end
 

@@ -7,14 +7,14 @@ Diese Datei landet nicht in der ZIP.
 
 | Feld | Wert |
 |---|---|
-| Project Name | `Gearwise` |
+| Project Name | `Scales` |
 | Summary (max. 255 Zeichen) | `Simulates your character (DPS / HPS / tank mitigation) and marks every item like Pawn: green arrow up for upgrades, red arrow down for downgrades – for all your specs. English and German.` |
 | Main Category | Bags & Inventory |
 | Additional Categories | Tooltip, Class, Combat |
 | Game Versions | Retail 12.0, WoW Forever, Mists of Pandaria Classic, Cataclysm Classic, Burning Crusade Anniversary, Classic Era |
 | License | All Rights Reserved (wie GoldKompass) oder MIT, wenn andere den Code nutzen dürfen sollen |
 | Project Logo | `docs/logo.png` (256×256, CurseForge skaliert selbst) |
-| Source / Issues (optional) | `https://github.com/Rottgar85/Gearwise` und `.../issues`, sobald das Repo existiert |
+| Source / Issues (optional) | `https://github.com/Rottgar85/Scales` und `.../issues`, sobald das Repo existiert |
 
 Die Kategorien heißen auf CurseForge manchmal leicht anders – nimm die nächstpassende.
 
@@ -24,13 +24,13 @@ Den Block unten komplett kopieren:
 
 ---
 
-![Gearwise](https://raw.githubusercontent.com/Rottgar85/Gearwise/main/docs/logo.png)
+![Scales](https://raw.githubusercontent.com/Rottgar85/Scales/main/docs/logo.png)
 
 **English** · [Deutsch weiter unten](#deutsch)
 
 ## Know at a glance whether an item is better
 
-Gearwise simulates your character and shows on every item whether it is an upgrade – just like Pawn, but with a real character model behind it:
+Scales simulates your character and shows on every item whether it is an upgrade – just like Pawn, but with a real character model behind it:
 
 - **Damage dealers:** damage per second
 - **Healers:** healing per second
@@ -48,19 +48,19 @@ Everything updates automatically when your gear, stats, spec or level change. No
 ### All specs at once
 Like Pawn, the tooltip shows one line per specialization – you see immediately whether that new item is better for damage, healing or tanking. In the character window you can click every spec to see its values and choose which specs appear in tooltips.
 
-### Character window `/gearwise`
+### Character window `/scales`
 Your simulated DPS / HPS / mitigation, your key stats and a rating for every equipped item, plus a live preview when you hover an item.
 
 ### Works everywhere
 Retail (Midnight) · WoW: Forever · Mists of Pandaria Classic · Cataclysm Classic · TBC Anniversary · Classic Era
 
-English and German (switch with `/gearwise language en|de|auto`). Minimap button and, in Retail, the addon compartment.
+English and German (switch with `/scales language en|de|auto`). Minimap button and, in Retail, the addon compartment.
 
 ### Commands
-`/gearwise` window · `/gearwise options` options · `/gearwise spec 1-4` set spec · `/gearwise reset` automatic spec · `/gearwise arrows` bag arrows · `/gearwise minimap` minimap button
+`/scales` window · `/scales options` options · `/scales spec 1-4` set spec · `/scales reset` automatic spec · `/scales arrows` bag arrows · `/scales minimap` minimap button
 
 ### Good to know
-Gearwise uses a fast analytical model, not a full rotation simulation like SimulationCraft or Raidbots. It is built for quick gear decisions while playing.
+Scales uses a fast analytical model, not a full rotation simulation like SimulationCraft or Raidbots. It is built for quick gear decisions while playing.
 
 ---
 
@@ -69,7 +69,7 @@ Gearwise uses a fast analytical model, not a full rotation simulation like Simul
 
 ## Auf einen Blick sehen, ob ein Item besser ist
 
-Gearwise simuliert deinen Charakter und zeigt an jedem Item, ob es eine Verbesserung ist – wie Pawn, aber mit einem echten Charaktermodell dahinter:
+Scales simuliert deinen Charakter und zeigt an jedem Item, ob es eine Verbesserung ist – wie Pawn, aber mit einem echten Charaktermodell dahinter:
 
 - **Schadensklassen:** Schaden pro Sekunde
 - **Heiler:** Heilung pro Sekunde
@@ -87,19 +87,19 @@ Alles aktualisiert sich automatisch, wenn sich Ausrüstung, Werte, Spezialisieru
 ### Alle Spezialisierungen auf einmal
 Wie bei Pawn zeigt der Tooltip eine Zeile pro Spezialisierung – du siehst sofort, ob das neue Item für Schaden, Heilung oder Tanken besser ist. Im Charakterfenster kannst du jede Spezialisierung anklicken und festlegen, welche im Tooltip erscheinen.
 
-### Charakterfenster `/gearwise`
+### Charakterfenster `/scales`
 Dein simulierter DPS-, HPS- oder Mitigationswert, die wichtigsten Werte und eine Wertung für jedes angelegte Item, dazu eine Live-Vorschau beim Überfahren eines Items.
 
 ### Läuft überall
 Retail (Midnight) · WoW: Forever · Mists of Pandaria Classic · Cataclysm Classic · TBC Anniversary · Classic Era
 
-Deutsch und Englisch (umschalten mit `/gearwise sprache de|en|auto`). Minimap-Button und in Retail das Addon-Fach.
+Deutsch und Englisch (umschalten mit `/scales sprache de|en|auto`). Minimap-Button und in Retail das Addon-Fach.
 
 ### Befehle
-`/gearwise` Fenster · `/gearwise options` Optionen · `/gearwise spec 1-4` Spezialisierung setzen · `/gearwise reset` Spezialisierung automatisch · `/gearwise arrows` Taschenpfeile · `/gearwise minimap` Minimap-Button
+`/scales` Fenster · `/scales options` Optionen · `/scales spec 1-4` Spezialisierung setzen · `/scales reset` Spezialisierung automatisch · `/scales arrows` Taschenpfeile · `/scales minimap` Minimap-Button
 
 ### Gut zu wissen
-Gearwise nutzt ein schnelles analytisches Modell, keine vollständige Rotations-Simulation wie SimulationCraft oder Raidbots. Es ist für schnelle Ausrüstungs-Entscheidungen beim Spielen gemacht.
+Scales nutzt ein schnelles analytisches Modell, keine vollständige Rotations-Simulation wie SimulationCraft oder Raidbots. Es ist für schnelle Ausrüstungs-Entscheidungen beim Spielen gemacht.
 
 ---
 
@@ -108,5 +108,5 @@ Gearwise nutzt ein schnelles analytisches Modell, keine vollständige Rotations-
 Mit `Druck` im Spiel landen sie in `World of Warcraft\_retail_\Screenshots`. Gut wären:
 1. Tooltip eines Items mit mehreren Spezialisierungs-Zeilen
 2. Geöffnete Taschen mit grünen, roten und goldenen Pfeilen
-3. Das Fenster `/gearwise` mit Spezialisierungs-Leiste
+3. Das Fenster `/scales` mit Spezialisierungs-Leiste
 4. Das Optionsfenster

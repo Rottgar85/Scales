@@ -41,7 +41,7 @@ local function Row(f, i)
 end
 
 function UI.Create()
-  local f = St.Panel("GearwiseFrame", UIParent, W, H)
+  local f = St.Panel("ScalesFrame", UIParent, W, H)
   f:SetPoint("CENTER")
   St.Movable(f)
   St.Header(f)

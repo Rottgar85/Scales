@@ -1,5 +1,5 @@
 -- Minimap button like GoldKompass: drag to move around the minimap, left click opens the window,
--- right click the options. In Retail Gearwise is also listed in the addon compartment.
+-- right click the options. In Retail Scales is also listed in the addon compartment.
 local ADDON, ns = ...
 local L = ns.L
 local St = ns.Style
@@ -9,7 +9,7 @@ ns.Minimap = M
 local button
 
 local function Place()
-  local a = math.rad(GearwiseDB.minimap.angle or 225)
+  local a = math.rad(ScalesDB.minimap.angle or 225)
   local r = (Minimap:GetWidth() or 140) / 2 + 10
   button:ClearAllPoints()
   button:SetPoint("CENTER", Minimap, "CENTER", r * math.cos(a), r * math.sin(a))
@@ -34,7 +34,7 @@ local function OnClick(_, btn)
 end
 
 function M.Init()
-  local b = CreateFrame("Button", "GearwiseMinimapButton", Minimap)
+  local b = CreateFrame("Button", "ScalesMinimapButton", Minimap)
   button = b
   b:SetSize(31, 31); b:SetFrameStrata("MEDIUM"); b:SetFrameLevel(8)
   local bg = b:CreateTexture(nil, "BACKGROUND")
@@ -55,7 +55,7 @@ function M.Init()
       local mx, my = Minimap:GetCenter()
       local px, py = GetCursorPosition()
       local sc = Minimap:GetEffectiveScale()
-      GearwiseDB.minimap.angle = math.deg(math.atan2(py / sc - my, px / sc - mx))
+      ScalesDB.minimap.angle = math.deg(math.atan2(py / sc - my, px / sc - mx))
       Place()
     end)
   end)
@@ -69,10 +69,10 @@ end
 function M.Apply()
   if not button then return end
   Place()
-  button:SetShown(not GearwiseDB.minimap.hide)
+  button:SetShown(not ScalesDB.minimap.hide)
 end
 
--- Addon compartment (Retail), declared in Gearwise_Mainline.toc.
-function Gearwise_OnAddonCompartmentClick(_, btn) OnClick(nil, btn) end
-function Gearwise_OnAddonCompartmentEnter(_, frame) ShowTooltip(frame) end
-function Gearwise_OnAddonCompartmentLeave() GameTooltip:Hide() end
+-- Addon compartment (Retail), declared in Scales_Mainline.toc.
+function Scales_OnAddonCompartmentClick(_, btn) OnClick(nil, btn) end
+function Scales_OnAddonCompartmentEnter(_, frame) ShowTooltip(frame) end
+function Scales_OnAddonCompartmentLeave() GameTooltip:Hide() end

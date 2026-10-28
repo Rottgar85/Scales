@@ -1,6 +1,6 @@
-<p align="center"><img src="docs/logo.png" width="128" alt="Gearwise"></p>
+<p align="center"><img src="docs/logo.png" width="128" alt="Scales"></p>
 
-<h1 align="center">Gearwise</h1>
+<h1 align="center">Scales</h1>
 
 [English](#english) · [Deutsch](#deutsch)
 
@@ -10,7 +10,7 @@ World of Warcraft addon for Retail (Midnight), WoW: Forever, Mists of Pandaria C
 
 ## English
 
-**Know at a glance whether an item is better.** Gearwise simulates your character – damage per second for damage dealers, healing per second for healers, effective health and mitigation for tanks – and marks every item like Pawn: green arrow up for upgrades, red arrow down for downgrades. Everything updates automatically, no button to press. English and German.
+**Know at a glance whether an item is better.** Scales simulates your character – damage per second for damage dealers, healing per second for healers, effective health and mitigation for tanks – and marks every item like Pawn: green arrow up for upgrades, red arrow down for downgrades. Everything updates automatically, no button to press. English and German.
 
 ### Features
 
@@ -26,7 +26,7 @@ World of Warcraft addon for Retail (Midnight), WoW: Forever, Mists of Pandaria C
 - Specs that share the same stat priorities are merged into one line
 
 **Character window**
-- `/gearwise` shows your simulated DPS, HPS or mitigation, your key stats and a rating for every equipped item
+- `/scales` shows your simulated DPS, HPS or mitigation, your key stats and a rating for every equipped item
 - Spec bar: click a specialization to see its values; the tick box decides whether it appears in tooltips
 - Live preview while hovering an item: "If equipped: 12,340 -> 12,870"
 
@@ -36,20 +36,20 @@ World of Warcraft addon for Retail (Midnight), WoW: Forever, Mists of Pandaria C
 - Recalculates after combat instead of during combat, so it never interferes with fights
 
 ### Commands
-- `/gearwise` or `/gwise` open the window
-- `/gearwise options` options
-- `/gearwise spec 1-4` set the specialization manually, `/gearwise reset` back to automatic
-- `/gearwise arrows` bag arrows on/off, `/gearwise minimap` minimap button on/off
-- `/gearwise language en`, `de` or `auto`
+- `/scales` open the window
+- `/scales options` options
+- `/scales spec 1-4` set the specialization manually, `/scales reset` back to automatic
+- `/scales arrows` bag arrows on/off, `/scales minimap` minimap button on/off
+- `/scales language en`, `de` or `auto`
 
 ### Limits
-Gearwise uses a fast analytical model, not a full rotation simulation like SimulationCraft or Raidbots. Stat weights are sensible defaults per role and primary stat, and trinket effects are estimated. It is made to compare gear quickly, not to replace a full sim.
+Scales uses a fast analytical model, not a full rotation simulation like SimulationCraft or Raidbots. Stat weights are sensible defaults per role and primary stat, and trinket effects are estimated. It is made to compare gear quickly, not to replace a full sim.
 
 ---
 
 ## Deutsch
 
-**Auf einen Blick sehen, ob ein Item besser ist.** Gearwise simuliert deinen Charakter – Schaden pro Sekunde für Schadensklassen, Heilung pro Sekunde für Heiler, effektive Lebenspunkte und verhinderten Schaden für Tanks – und markiert jedes Item wie Pawn: grüner Pfeil nach oben für Verbesserungen, roter Pfeil nach unten für Verschlechterungen. Alles aktualisiert sich automatisch, ohne Knopfdruck. Deutsch und Englisch.
+**Auf einen Blick sehen, ob ein Item besser ist.** Scales simuliert deinen Charakter – Schaden pro Sekunde für Schadensklassen, Heilung pro Sekunde für Heiler, effektive Lebenspunkte und verhinderten Schaden für Tanks – und markiert jedes Item wie Pawn: grüner Pfeil nach oben für Verbesserungen, roter Pfeil nach unten für Verschlechterungen. Alles aktualisiert sich automatisch, ohne Knopfdruck. Deutsch und Englisch.
 
 ### Funktionen
 
@@ -65,7 +65,7 @@ Gearwise uses a fast analytical model, not a full rotation simulation like Simul
 - Spezialisierungen mit denselben Werte-Prioritäten werden zu einer Zeile zusammengefasst
 
 **Charakterfenster**
-- `/gearwise` zeigt deinen simulierten DPS-, HPS- oder Mitigationswert, die wichtigsten Werte und eine Wertung für jedes angelegte Item
+- `/scales` zeigt deinen simulierten DPS-, HPS- oder Mitigationswert, die wichtigsten Werte und eine Wertung für jedes angelegte Item
 - Spezialisierungs-Leiste: Klick zeigt die Werte dieser Spezialisierung, das Häkchen legt fest, ob sie im Tooltip erscheint
 - Live-Vorschau beim Überfahren eines Items: „Wenn angelegt: 12.340 -> 12.870“
 
@@ -75,14 +75,14 @@ Gearwise uses a fast analytical model, not a full rotation simulation like Simul
 - Rechnet nach dem Kampf neu statt währenddessen und stört so nie im Kampf
 
 ### Befehle
-- `/gearwise` oder `/gwise` Fenster öffnen
-- `/gearwise options` Optionen
-- `/gearwise spec 1-4` Spezialisierung von Hand setzen, `/gearwise reset` zurück auf automatisch
-- `/gearwise arrows` Taschenpfeile an/aus, `/gearwise minimap` Minimap-Button an/aus
-- `/gearwise language en`, `de` oder `auto` (auch `/gearwise sprache …`)
+- `/scales` Fenster öffnen
+- `/scales options` Optionen
+- `/scales spec 1-4` Spezialisierung von Hand setzen, `/scales reset` zurück auf automatisch
+- `/scales arrows` Taschenpfeile an/aus, `/scales minimap` Minimap-Button an/aus
+- `/scales language en`, `de` oder `auto` (auch `/scales sprache …`)
 
 ### Grenzen
-Gearwise nutzt ein schnelles analytisches Modell, keine vollständige Rotations-Simulation wie SimulationCraft oder Raidbots. Die Stat-Gewichte sind sinnvolle Standardwerte je Rolle und Hauptwert, Schmuckstück-Effekte werden geschätzt. Es ist zum schnellen Vergleichen von Ausrüstung gedacht, nicht als Ersatz für eine vollständige Simulation.
+Scales nutzt ein schnelles analytisches Modell, keine vollständige Rotations-Simulation wie SimulationCraft oder Raidbots. Die Stat-Gewichte sind sinnvolle Standardwerte je Rolle und Hauptwert, Schmuckstück-Effekte werden geschätzt. Es ist zum schnellen Vergleichen von Ausrüstung gedacht, nicht als Ersatz für eine vollständige Simulation.
 
 ---
 

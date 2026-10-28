@@ -1,5 +1,5 @@
 param([string]$OutDir, [int]$Size = 256)
-# Draws the Gearwise logo: dark round badge, cyan gear, gold upgrade arrow. Writes Logo.tga (WoW) and logo.png.
+# Draws the Scales logo: dark round badge, cyan gear, gold upgrade arrow. Writes Logo.tga (WoW) and logo.png.
 Add-Type -AssemblyName System.Drawing
 
 $S = $Size

@@ -1,5 +1,5 @@
 -- Default stat weights per archetype. Values are "points per 1 stat", primary stat = 1.0.
--- They are starting points; users can override them in GearwiseDB.customWeights.
+-- They are starting points; users can override them in ScalesDB.customWeights.
 local ADDON, ns = ...
 local C = ns.C
 
@@ -54,6 +54,6 @@ end
 
 function W.Get(class, specIndex)
   local key = W.GetArchetypeKey(class, specIndex)
-  local custom = GearwiseDB and GearwiseDB.customWeights and GearwiseDB.customWeights[class .. specIndex]
+  local custom = ScalesDB and ScalesDB.customWeights and ScalesDB.customWeights[class .. specIndex]
   return custom or W.archetypes[key], key
 end

@@ -8,7 +8,7 @@ local TAG = St.Icon(St.LOGO, 14) .. " " .. St.TITLE
 local function fmt(n) return BreakUpLargeNumbers(math.floor(n + 0.5)) end
 
 local function AddLines(tooltip, link)
-  if not link or not GearwiseDB or not GearwiseDB.tooltip then return end
+  if not link or not ScalesDB or not ScalesDB.tooltip then return end
   -- Same verdict as the bag arrows and the preview, so they never disagree.
   local verdict, r = ns.Compare.Verdict(link)
   if not r then return end

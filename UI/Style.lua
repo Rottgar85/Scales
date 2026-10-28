@@ -1,17 +1,17 @@
--- Shared look for all Gearwise windows, in the style of GoldKompass: flat dark panel, 2 px border,
+-- Shared look for all Scales windows, in the style of GoldKompass: flat dark panel, 2 px border,
 -- tinted header bar with an accent line, logo in front of the title.
 local ADDON, ns = ...
 local St = {}
 ns.Style = St
 
-St.LOGO = "Interface\\AddOns\\Gearwise\\Media\\Logo"
-St.ARROW_UP = "Interface\\AddOns\\Gearwise\\Media\\ArrowUp"
-St.ARROW_DOWN = "Interface\\AddOns\\Gearwise\\Media\\ArrowDown"
-St.ARROW_OTHER = "Interface\\AddOns\\Gearwise\\Media\\ArrowOther"
+St.LOGO = "Interface\\AddOns\\Scales\\Media\\Logo"
+St.ARROW_UP = "Interface\\AddOns\\Scales\\Media\\ArrowUp"
+St.ARROW_DOWN = "Interface\\AddOns\\Scales\\Media\\ArrowDown"
+St.ARROW_OTHER = "Interface\\AddOns\\Scales\\Media\\ArrowOther"
 
 St.CYAN = { 0.2, 0.8, 1 }
 St.GOLD = { 1, 0.82, 0 }
-St.TITLE = "|cff33ccffGear|r|cffffcc00wise|r"
+St.TITLE = "|cff33ccffScales|r"
 St.GREEN, St.RED, St.GREY, St.ORANGE = "|cff1eff00", "|cffff3030", "|cff999999", "|cffff9900"
 
 local BACKDROP = { bgFile = "Interface\\Buttons\\WHITE8x8", edgeFile = "Interface\\Buttons\\WHITE8x8", edgeSize = 2 }
