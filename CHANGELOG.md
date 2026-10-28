@@ -1,5 +1,19 @@
 # Scales Changelog
 
+## 0.1.3
+
+**English**
+- Classic (TBC Anniversary, Classic Era, Cata, Mists): the Scales rating now also appears in auction house, vendor, loot, mail and trade tooltips
+- Bag arrows now also appear in Bagnon
+- A Scales error can no longer break an item tooltip; other addons' hidden scan tooltips are left alone
+- `/scales debug` shows which bag addon is used and the last tooltip error
+
+**Deutsch**
+- Classic (TBC Anniversary, Classic Era, Cata, Mists): Die Scales-Bewertung erscheint jetzt auch in Tooltips von Auktionshaus, Händler, Beute, Post und Handel
+- Taschenpfeile erscheinen jetzt auch in Bagnon
+- Ein Fehler in Scales kann keinen Item-Tooltip mehr kaputt machen; versteckte Scan-Tooltips anderer Addons bleiben unberührt
+- `/scales debug` zeigt, welches Taschen-Addon genutzt wird, und den letzten Tooltip-Fehler
+
 ## 0.1.2
 
 **English**

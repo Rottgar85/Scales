@@ -7,8 +7,11 @@ local TAG = St.Icon(St.LOGO, 14) .. " " .. St.TITLE
 
 local function fmt(n) return BreakUpLargeNumbers(math.floor(n + 0.5)) end
 
-local function AddLines(tooltip, link)
-  if not link or not ScalesDB or not ScalesDB.tooltip then return end
+-- Several hooks can fire for the same tooltip; this keeps the Scales lines to one set per display.
+-- Every new item clears the tooltip first (OnTooltipCleared), which resets the flag.
+local done = setmetatable({}, { __mode = "k" })
+
+local function Render(tooltip, link)
   -- Same verdict as the bag arrows and the preview, so they never disagree.
   local verdict, r = ns.Compare.Verdict(link)
   if not r then return end
@@ -45,22 +48,54 @@ local function AddLines(tooltip, link)
     tooltip:AddDoubleLine("   " .. St.Icon(o.icon, 14) .. " " .. o.names .. "  " .. oc .. ow .. "|r", right, 1, 1, 1)
   end
   if r.armor == "wrong" then tooltip:AddLine("   " .. ORANGE .. L.WRONG_ARMOR .. "|r") end
-  tooltip:Show()
-  if ns.UI.Preview then ns.UI.Preview(link, r, verdict) end
+  -- Other addons scan items with a hidden GameTooltip: never pop that up or preview it.
+  if tooltip:IsShown() then
+    tooltip:Show()
+    if ns.UI.Preview then ns.UI.Preview(link, r, verdict) end
+  end
 end
 
+local function AddLines(tooltip, link)
+  if not link or not ScalesDB or not ScalesDB.tooltip or done[tooltip] then return end
+  if ns.C.IsSecret(link) then return end
+  done[tooltip] = true
+  -- A Scales error must never break the game's tooltip.
+  local ok, err = pcall(Render, tooltip, link)
+  if not ok then ns.lastTooltipError = tostring(err) end
+end
+
+local TOOLTIPS = { GameTooltip, ItemRefTooltip }
+
+local function FromTooltip(tooltip)
+  local _, link = tooltip:GetItem()
+  AddLines(tooltip, link)
+end
+
+for _, tt in ipairs(TOOLTIPS) do
+  -- A new item in the same tooltip clears it first; then the lines may be added again.
+  if tt:HasScript("OnTooltipCleared") then tt:HookScript("OnTooltipCleared", function(self) done[self] = nil end) end
+  tt:HookScript("OnHide", function(self) done[self] = nil end)
+end
+
+-- Modern clients: one hook for every item tooltip.
 if TooltipDataProcessor and Enum and Enum.TooltipDataType then
   TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, function(tooltip, data)
     if tooltip ~= GameTooltip and tooltip ~= ItemRefTooltip then return end
     local _, link = tooltip:GetItem()
     AddLines(tooltip, link or (data and data.hyperlink))
   end)
-else
-  for _, tt in ipairs({ GameTooltip, ItemRefTooltip }) do
-    tt:HookScript("OnTooltipSetItem", function(self)
-      local _, link = self:GetItem()
-      AddLines(self, link)
-    end)
-  end
 end
+
+-- Classic clients do not route every tooltip through TooltipDataProcessor (the auction house in
+-- TBC Anniversary, for one), so like Pawn we also hook the item setters and OnTooltipSetItem.
+for _, tt in ipairs(TOOLTIPS) do
+  if tt:HasScript("OnTooltipSetItem") then tt:HookScript("OnTooltipSetItem", FromTooltip) end
+end
+for _, method in ipairs({ "SetAuctionItem", "SetAuctionSellItem", "SetItemKey", "SetBagItem", "SetBuybackItem",
+  "SetGuildBankItem", "SetHyperlink", "SetInboxItem", "SetInventoryItem", "SetItemByID", "SetLootItem",
+  "SetLootRollItem", "SetMerchantItem", "SetQuestItem", "SetQuestLogItem", "SetSendMailItem",
+  "SetTradePlayerItem", "SetTradeTargetItem", "SetTradeSkillItem", "SetRecipeResultItem" }) do
+  if GameTooltip[method] then hooksecurefunc(GameTooltip, method, FromTooltip) end
+end
+if ItemRefTooltip.SetHyperlink then hooksecurefunc(ItemRefTooltip, "SetHyperlink", FromTooltip) end
 GameTooltip:HookScript("OnHide", function() if ns.UI.Preview then ns.UI.Preview(nil) end end)

@@ -71,7 +71,7 @@ ev:SetScript("OnEvent", function(_, event, arg1)
     ns.Bags.QueueRefresh()
   elseif event == "GET_ITEM_INFO_RECEIVED" then
     -- Item stats that were missing before may change a cached arrow.
-    ns.Bags.QueueFullRefresh()
+    ns.Bags.QueueItemInfoRefresh()
   elseif event == "PLAYER_REGEN_ENABLED" then
     if deferred then QueueResim() end
   elseif event ~= "ADDON_LOADED" then
@@ -105,7 +105,9 @@ SlashCmdList.SCALES = function(msg)
     local lang = ({ en = "en", english = "en", de = "de", deutsch = "de", german = "de", auto = "auto" })[arg]
     if lang then ns.SetLanguage(lang) else print("|cff33ccffScales|r: /scales language en | de | auto") end
   elseif cmd == "debug" then
-    ns.Bags.Debug(function(s) print("|cff33ccffScales|r " .. s) end)
+    local say = function(s) print("|cff33ccffScales|r " .. s) end
+    ns.Bags.Debug(say)
+    if ns.lastTooltipError then say("Last tooltip error: " .. ns.lastTooltipError) end
   elseif cmd == "reset" then
     ScalesCharDB.specOverride = nil
     ScalesDB.customWeights = {}

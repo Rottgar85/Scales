@@ -12,6 +12,7 @@ C.isClassic = not C.isRetail
 
 -- Midnight and Forever may return "secret values" in combat; any arithmetic on them errors.
 local issecret = issecretvalue or function() return false end
+C.IsSecret = issecret
 function C.Num(v, fallback)
   if v == nil or issecret(v) then return fallback or 0 end
   return v
