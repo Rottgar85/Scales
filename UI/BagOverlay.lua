@@ -89,11 +89,16 @@ end
 -- secure buttons: our textures hang on btn._textOverlay and are tracked in our own weak table.
 
 local euiArrows = setmetatable({}, { __mode = "k" })
+-- Counters for /scales debug.
+local stats = { paints = 0, withLink = 0, noHost = 0, arrows = 0 }
 
-local function PaintEUI(btn, data)
+local function PaintEUIInner(btn, data)
+  stats.paints = stats.paints + 1
   local host = btn._textOverlay
-  if not host then return end -- EllesmereUI asks for overlays on _textOverlay only
+  if not host then stats.noHost = stats.noHost + 1; return end -- EllesmereUI asks for overlays on _textOverlay only
+  if data and data.itemLink then stats.withLink = stats.withLink + 1 end
   local verdict = data and data.itemLink and ArrowFor(data.itemLink)
+  if verdict then stats.arrows = stats.arrows + 1 end
   local t = euiArrows[btn]
   if verdict and not t then
     t = host:CreateTexture(nil, "OVERLAY", nil, 7)
@@ -102,6 +107,12 @@ local function PaintEUI(btn, data)
     euiArrows[btn] = t
   end
   if t then ShowArrow(t, verdict) end
+end
+
+-- EllesmereUI hides painter errors from the player, so they are kept for /scales debug.
+local function PaintEUI(btn, data)
+  local ok, err = pcall(PaintEUIInner, btn, data)
+  if not ok then stats.lastError = tostring(err) end
 end
 
 local function RefreshEUI()
@@ -142,4 +153,35 @@ function B.Init()
   if ToggleBag then hooksecurefunc("ToggleBag", B.QueueRefresh) end
   local eui = _G.EUI_Bags
   if eui and eui.RegisterItemOverlayIcon then eui.RegisterItemOverlayIcon(ADDON, PaintEUI) end
+end
+
+-- /scales debug: what the bag integration sees, to find out why arrows are missing.
+function B.Debug(say)
+  local eui = _G.EUI_Bags
+  say("EllesmereUI Bags: " .. (eui and "found" or "not found")
+    .. ", API: " .. tostring(eui and eui.RegisterItemOverlayIcon ~= nil)
+    .. ", registered: " .. tostring(eui and eui.itemOverlayIcons and eui.itemOverlayIcons[ADDON] == PaintEUI)
+    .. ", shown: " .. tostring(eui and eui:IsShown()))
+  say(string.format("Paint calls: %d, with item: %d, without overlay frame: %d, arrows: %d",
+    stats.paints, stats.withLink, stats.noHost, stats.arrows))
+  if stats.lastError then say("Last painter error: " .. stats.lastError) end
+  say("Options: green " .. tostring(ScalesDB.bagArrows) .. ", red " .. tostring(ScalesDB.bagDown)
+    .. ", gold " .. tostring(ScalesDB.bagOther) .. ", active scale: " .. tostring(ns.archetype))
+  -- First few equipment items in the bags, computed fresh (no cache).
+  local shown = 0
+  for bag = 0, C.NUM_BAGS do
+    for slot = 1, (C.GetContainerNumSlots(bag) or 0) do
+      local link = C.GetContainerItemLink(bag, slot)
+      local equipLoc
+      if link then equipLoc = select(4, C.GetItemInfoInstant(link)) end
+      if equipLoc and C.SlotsForEquipLoc[equipLoc] and shown < 6 then
+        shown = shown + 1
+        local verdict, r = ns.Compare.Verdict(link)
+        local ok, arrow = pcall(Compute, link)
+        say(string.format("  %s: verdict %s, pct %s, arrow %s", link, tostring(verdict),
+          r and r.pct and string.format("%.1f", r.pct) or "-", ok and tostring(arrow) or ("ERROR " .. tostring(arrow))))
+      end
+    end
+  end
+  if shown == 0 then say("  No equipment found in bags.") end
 end

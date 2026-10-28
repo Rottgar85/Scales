@@ -104,6 +104,8 @@ SlashCmdList.SCALES = function(msg)
   elseif cmd == "language" or cmd == "sprache" then
     local lang = ({ en = "en", english = "en", de = "de", deutsch = "de", german = "de", auto = "auto" })[arg]
     if lang then ns.SetLanguage(lang) else print("|cff33ccffScales|r: /scales language en | de | auto") end
+  elseif cmd == "debug" then
+    ns.Bags.Debug(function(s) print("|cff33ccffScales|r " .. s) end)
   elseif cmd == "reset" then
     ScalesCharDB.specOverride = nil
     ScalesDB.customWeights = {}
