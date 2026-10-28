@@ -1,5 +1,6 @@
 -- Pawn-style arrows on bag item icons: green up for upgrades, red down for downgrades,
--- gold up for upgrades for another ticked spec. Works with the Blizzard bags, EllesmereUI Bags and Bagnon.
+-- gold up for upgrades for another ticked spec. Works with the Blizzard bags and the bag addons below
+-- (EllesmereUI Bags, Bagnon, ElvUI, Baganator, AdiBags, BetterBags).
 local ADDON, ns = ...
 local C = ns.C
 local B = {}
@@ -84,90 +85,145 @@ function B.Refresh()
   end
 end
 
--- EllesmereUI Bags -------------------------------------------------------------------
--- Uses its public overlay API (EUI_Bags.RegisterItemOverlayIcon). As it asks, no state is kept on its
--- secure buttons: our textures hang on btn._textOverlay and are tracked in our own weak table.
 
-local euiArrows = setmetatable({}, { __mode = "k" })
--- Counters for /scales debug.
-local stats = { paints = 0, withLink = 0, noHost = 0, arrows = 0 }
+-- Bag addons -------------------------------------------------------------------------
+-- Each bag addon tells us through its own hook or API when it updates an item button. A painter draws
+-- our arrow on a host frame of that button, remembers the button and its link (weak tables, no state on
+-- the addon's secure buttons) and can repaint everything it has seen without the addon redrawing, which
+-- is cheap and allowed in combat.
 
-local function PaintEUIInner(btn, data)
-  stats.paints = stats.paints + 1
-  local host = btn._textOverlay
-  if not host then stats.noHost = stats.noHost + 1; return end -- EllesmereUI asks for overlays on _textOverlay only
-  if data and data.itemLink then stats.withLink = stats.withLink + 1 end
-  local verdict = data and data.itemLink and ArrowFor(data.itemLink)
-  if verdict then stats.arrows = stats.arrows + 1 end
-  local t = euiArrows[btn]
-  if verdict and not t then
-    t = host:CreateTexture(nil, "OVERLAY", nil, 7)
-    t:SetSize(18, 18)
-    -- Bottom right, where EllesmereUI puts Pawn's arrow: the top left holds its item level text.
-    t:SetPoint("BOTTOMRIGHT", host, "BOTTOMRIGHT", -1, 1)
-    euiArrows[btn] = t
+local painters = {}
+
+local function NewPainter(name, point, x, y, size)
+  local p = { name = name, arrows = setmetatable({}, { __mode = "k" }),
+    seen = setmetatable({}, { __mode = "k" }), calls = 0 }
+
+  function p.Paint(button, host, link)
+    p.calls = p.calls + 1
+    p.seen[button] = { host = host, link = link }
+    local verdict = link and ArrowFor(link)
+    local t = p.arrows[button]
+    if verdict and not t then
+      t = host:CreateTexture(nil, "OVERLAY", nil, 7)
+      t:SetSize(size, size)
+      t:SetPoint(point, host, point, x, y)
+      p.arrows[button] = t
+    end
+    if t then ShowArrow(t, verdict) end
   end
-  if t then ShowArrow(t, verdict) end
+
+  -- A Scales error must never break the bag addon's redraw.
+  function p.SafePaint(button, host, link)
+    if not button or not host then return end
+    local ok, err = pcall(p.Paint, button, host, link)
+    if not ok then p.lastError = tostring(err) end
+  end
+
+  function p.Repaint()
+    for button, s in pairs(p.seen) do
+      if button:IsVisible() then p.SafePaint(button, s.host, s.link) end
+    end
+  end
+
+  painters[#painters + 1] = p
+  return p
 end
 
--- EllesmereUI hides painter errors from the player, so they are kept for /scales debug.
-local function PaintEUI(btn, data)
-  local ok, err = pcall(PaintEUIInner, btn, data)
-  if not ok then stats.lastError = tostring(err) end
-end
-
-local function RefreshEUI()
+-- EllesmereUI Bags: public overlay API. It asks for overlays on btn._textOverlay; the bottom right is
+-- where it puts Pawn's arrow, the top left holds its item level text.
+local function InitEllesmere()
   local eui = _G.EUI_Bags
-  if eui and eui.RefreshInventory and eui:IsShown() then eui:RefreshInventory() end
+  if not (eui and eui.RegisterItemOverlayIcon) then return end
+  local p = NewPainter("EllesmereUI Bags", "BOTTOMRIGHT", -1, 1, 18)
+  eui.RegisterItemOverlayIcon(ADDON, function(btn, data)
+    if btn and btn._textOverlay then p.SafePaint(btn, btn._textOverlay, data and data.itemLink) end
+  end)
 end
 
--- Bagnon (BagBrother) ----------------------------------------------------------------
--- Bagnon calls Item:UpdateUpgradeIcon on every item update (it uses it for Pawn's arrow); Scales hooks it.
--- Arrows are tracked in our own weak table, keyed by Bagnon's item button.
-
-local bagnonArrows = setmetatable({}, { __mode = "k" })
-local bagnonHooked = false
-
-local function PaintBagnon(item)
-  local link = item.info and item.info.hyperlink
-  local verdict = link and ArrowFor(link)
-  local t = bagnonArrows[item]
-  if verdict and not t then
-    t = item:CreateTexture(nil, "OVERLAY", nil, 7)
-    t:SetSize(16, 16)
-    t:SetPoint("TOPLEFT", item, "TOPLEFT", 0, 0)
-    bagnonArrows[item] = t
-  end
-  if t then ShowArrow(t, verdict) end
-end
-
-local function RefreshBagnon()
-  for item in pairs(bagnonArrows) do
-    if item:IsVisible() then PaintBagnon(item) end
-  end
-end
-
--- Items that never had an arrow are not in bagnonArrows yet, so a full refresh asks Bagnon to update
--- all its frames, which calls UpdateUpgradeIcon (and so PaintBagnon) on every item. Bagnon re-lays out
--- its secure buttons then, which is not allowed in combat: there only our own arrows are repainted.
-local function RefreshBagnonAll()
-  local bb = _G.BagBrother
-  if bb and bb.Frames and bb.Frames.Update and not InCombatLockdown() then pcall(bb.Frames.Update, bb.Frames)
-  else RefreshBagnon() end
-end
-
--- Bagnon copies all class methods onto each button the first time it builds one (Item:Bind caches the list
--- per class), so the hook has to be in place before that: this runs while Scales loads, right after BagBrother
--- (OptionalDeps), before any Bagnon window exists. Cached method lists are dropped to be safe.
+-- Bagnon and the other BagBrother bags: Item:UpdateUpgradeIcon runs on every item update (Bagnon uses it
+-- for Pawn). Bagnon copies all class methods onto each button the first time it builds one (Item:Bind
+-- caches the list per class), so this hook runs while Scales loads, right after BagBrother (OptionalDeps)
+-- and before any Bagnon window exists. Cached method lists are dropped to be safe.
 do
   local bb = _G.BagBrother
   if bb and bb.Item and type(bb.Item.UpdateUpgradeIcon) == "function" then
-    hooksecurefunc(bb.Item, "UpdateUpgradeIcon", function(item) pcall(PaintBagnon, item) end)
-    bagnonHooked = true
+    local p = NewPainter("Bagnon", "TOPLEFT", 0, 0, 16)
+    hooksecurefunc(bb.Item, "UpdateUpgradeIcon", function(item)
+      p.SafePaint(item, item, item.info and item.info.hyperlink)
+    end)
     for _, class in pairs(bb) do
       if type(class) == "table" and rawget(class, "__bindList") then rawset(class, "__bindList", nil) end
     end
   end
+end
+
+-- ElvUI bags: B:UpdateSlot(frame, bagID, slotID) updates one slot (ElvUI asks Pawn there too).
+local function InitElvUI()
+  local E = _G.ElvUI and _G.ElvUI[1]
+  local Bags = E and E.GetModule and E:GetModule("Bags", true)
+  if not (Bags and type(Bags.UpdateSlot) == "function") then return end
+  local p = NewPainter("ElvUI", "TOPLEFT", 1, -1, 16)
+  hooksecurefunc(Bags, "UpdateSlot", function(_, frame, bagID, slotID)
+    local bag = frame and frame.Bags and frame.Bags[bagID]
+    local slot = bag and bag[slotID]
+    if slot then p.SafePaint(slot, slot, slot.itemLink) end
+  end)
+end
+
+-- Baganator: its corner widget API. The corner can be changed in Baganator's settings ("Icon corners").
+local function InitBaganator()
+  local api = _G.Baganator and _G.Baganator.API
+  if not (api and api.RegisterCornerWidget) then return end
+  local p = NewPainter("Baganator", "TOPLEFT", 0, 0, 16)
+  local ok, err = pcall(api.RegisterCornerWidget, "Scales", "scales_arrow",
+    function(corner, details)
+      p.calls = p.calls + 1
+      local link = details and details.itemLink
+      if not link then return false end
+      local ok2, verdict = pcall(ArrowFor, link)
+      if not ok2 then p.lastError = tostring(verdict); return false end
+      if not verdict then return false end
+      ShowArrow(corner, verdict)
+      return true
+    end,
+    function(itemButton)
+      local t = itemButton:CreateTexture(nil, "OVERLAY", nil, 7)
+      t:SetSize(16, 16)
+      p.arrows[itemButton] = t
+      return t
+    end,
+    { corner = "top_left", priority = 1 })
+  if not ok then p.lastError = tostring(err) end
+  -- Baganator redraws its own corners on request.
+  p.Repaint = function() if api.RequestItemButtonsRefresh then pcall(api.RequestItemButtonsRefresh) end end
+end
+
+-- AdiBags: every button update ends with the message AdiBags_UpdateButton.
+local function InitAdiBags()
+  local AceAddon = LibStub and LibStub("AceAddon-3.0", true)
+  local AceEvent = LibStub and LibStub("AceEvent-3.0", true)
+  if not (AceAddon and AceEvent and AceAddon:GetAddon("AdiBags", true)) then return end
+  local p = NewPainter("AdiBags", "TOPLEFT", 0, 0, 16)
+  local listener = {}
+  AceEvent:Embed(listener)
+  listener:RegisterMessage("AdiBags_UpdateButton", function(_, button)
+    if button then p.SafePaint(button, button, button.itemLink) end
+  end)
+end
+
+-- BetterBags: every item update ends with the message item/Updated (item, decoration).
+local function InitBetterBags()
+  local AceAddon = LibStub and LibStub("AceAddon-3.0", true)
+  local addon = AceAddon and AceAddon:GetAddon("BetterBags", true)
+  local events = addon and addon.GetModule and addon:GetModule("Events", true)
+  if not (events and events.RegisterMessage) then return end
+  local p = NewPainter("BetterBags", "TOPLEFT", 0, 0, 16)
+  events:RegisterMessage("item/Updated", function(_, item, decoration)
+    if not item then return end
+    local data = item.GetItemData and item:GetItemData()
+    local link = data and data.itemInfo and data.itemInfo.itemLink
+    p.SafePaint(item, decoration or item.button, link)
+  end)
 end
 
 -- Queueing ---------------------------------------------------------------------------
@@ -176,7 +232,10 @@ local pending, pendingFull = false, false
 local function Run()
   pending = false
   B.Refresh()
-  if pendingFull then pendingFull = false; RefreshEUI(); RefreshBagnonAll() end
+  if pendingFull then
+    pendingFull = false
+    for _, p in ipairs(painters) do p.Repaint() end
+  end
 end
 
 -- After bag changes: the bag addons repaint on their own, only the Blizzard bags need us.
@@ -186,11 +245,19 @@ function B.QueueRefresh()
   C_Timer.After(0.1, Run)
 end
 
--- After a re-simulation, an option change or new item data: results are stale and bag addons have to repaint too.
+-- After a re-simulation, an option change or new item data: results are stale, our arrows in the bag
+-- addons are repainted too.
 function B.QueueFullRefresh()
   wipe(cache)
   pendingFull = true
   B.QueueRefresh()
+end
+
+-- Item data arrives in bursts (one event per item); refresh once when it has settled.
+local infoTimer
+function B.QueueItemInfoRefresh()
+  if infoTimer then return end
+  infoTimer = C_Timer.NewTimer(0.5, function() infoTimer = nil; B.QueueFullRefresh() end)
 end
 
 function B.Init()
@@ -201,42 +268,22 @@ function B.Init()
   if ToggleAllBags then hooksecurefunc("ToggleAllBags", B.QueueRefresh) end
   if OpenAllBags then hooksecurefunc("OpenAllBags", B.QueueRefresh) end
   if ToggleBag then hooksecurefunc("ToggleBag", B.QueueRefresh) end
-  local eui = _G.EUI_Bags
-  if eui and eui.RegisterItemOverlayIcon then eui.RegisterItemOverlayIcon(ADDON, PaintEUI) end
-end
-
--- Item data arrives in bursts (one event per item); refresh once when it has settled.
-local infoTimer
-function B.QueueItemInfoRefresh()
-  if infoTimer then return end
-  infoTimer = C_Timer.NewTimer(0.5, function() infoTimer = nil; B.QueueFullRefresh() end)
+  for _, init in ipairs({ InitEllesmere, InitElvUI, InitBaganator, InitAdiBags, InitBetterBags }) do
+    local ok, err = pcall(init)
+    if not ok then B.initError = tostring(err) end
+  end
 end
 
 -- /scales debug: what the bag integration sees, to find out why arrows are missing.
 function B.Debug(say)
-  local eui = _G.EUI_Bags
-  if eui then
-    say("EllesmereUI Bags: found, API: " .. tostring(eui.RegisterItemOverlayIcon ~= nil)
-      .. ", registered: " .. tostring(eui.itemOverlayIcons and eui.itemOverlayIcons[ADDON] == PaintEUI)
-      .. ", shown: " .. tostring(eui:IsShown()))
-    say(string.format("  Paint calls: %d, with item: %d, without overlay frame: %d, arrows: %d",
-      stats.paints, stats.withLink, stats.noHost, stats.arrows))
-    if stats.lastError then say("  Last painter error: " .. stats.lastError) end
-    local made, shownNow = 0, 0
-    for _, t in pairs(euiArrows) do
-      made = made + 1
-      if t:IsVisible() then shownNow = shownNow + 1 end
-    end
-    say(string.format("  Arrow textures: %d, visible right now: %d", made, shownNow))
-  end
-  local bb = _G.BagBrother
-  if bb then
+  if #painters == 0 then say("Bags: Blizzard bags (no supported bag addon found)") end
+  for _, p in ipairs(painters) do
     local n, vis = 0, 0
-    for _, t in pairs(bagnonArrows) do n = n + 1; if t:IsVisible() then vis = vis + 1 end end
-    say(string.format("Bagnon: found, hooked: %s, arrow textures: %d, visible: %d",
-      tostring(bagnonHooked), n, vis))
+    for _, t in pairs(p.arrows) do n = n + 1; if t:IsVisible() then vis = vis + 1 end end
+    say(string.format("%s: updates %d, arrow textures %d, visible %d", p.name, p.calls, n, vis))
+    if p.lastError then say("  Last error: " .. p.lastError) end
   end
-  if not eui and not bb then say("Bags: Blizzard bags (no bag addon found)") end
+  if B.initError then say("Bag addon setup error: " .. B.initError) end
   say("Options: green " .. tostring(ScalesDB.bagArrows) .. ", red " .. tostring(ScalesDB.bagDown)
     .. ", gold " .. tostring(ScalesDB.bagOther) .. ", active scale: " .. tostring(ns.archetype))
   -- First few equipment items in the bags, computed fresh (no cache).
