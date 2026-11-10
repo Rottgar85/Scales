@@ -59,14 +59,14 @@ $g.Dispose()
 
 $bmp.Save((Join-Path $OutDir "logo.png"), [System.Drawing.Imaging.ImageFormat]::Png)
 
-# Uncompressed 32-bit TGA, top-left origin (descriptor 0x28), BGRA
+# Uncompressed 32-bit TGA, bottom-left origin (descriptor 0x08), BGRA; some clients ignore the top-left flag and flip the image
 $data = New-Object byte[] (18 + $S * $S * 4)
 $data[2] = 2
 $data[12] = $S -band 0xFF; $data[13] = $S -shr 8
 $data[14] = $S -band 0xFF; $data[15] = $S -shr 8
-$data[16] = 32; $data[17] = 0x28
+$data[16] = 32; $data[17] = 0x08
 $o = 18
-for ($y = 0; $y -lt $S; $y++) { for ($x = 0; $x -lt $S; $x++) {
+for ($y = $S - 1; $y -ge 0; $y--) { for ($x = 0; $x -lt $S; $x++) {
   $px = $bmp.GetPixel($x, $y)
   $data[$o] = $px.B; $data[$o + 1] = $px.G; $data[$o + 2] = $px.R; $data[$o + 3] = $px.A; $o += 4
 } }

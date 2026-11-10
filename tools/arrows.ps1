@@ -4,9 +4,10 @@ Add-Type -AssemblyName System.Drawing
 
 function SaveTga($bmp, $file) {
   $data = New-Object byte[] (18 + $S * $S * 4)
-  $data[2] = 2; $data[12] = $S; $data[14] = $S; $data[16] = 32; $data[17] = 0x28
+  $data[2] = 2; $data[12] = $S; $data[14] = $S; $data[16] = 32; $data[17] = 0x08
   $o = 18
-  for ($y = 0; $y -lt $S; $y++) { for ($x = 0; $x -lt $S; $x++) {
+  # bottom-left origin: some clients ignore the top-left flag and flip the image
+  for ($y = $S - 1; $y -ge 0; $y--) { for ($x = 0; $x -lt $S; $x++) {
     $px = $bmp.GetPixel($x, $y)
     $data[$o] = $px.B; $data[$o + 1] = $px.G; $data[$o + 2] = $px.R; $data[$o + 3] = $px.A; $o += 4
   } }

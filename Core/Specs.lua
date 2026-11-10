@@ -5,6 +5,28 @@ local Sp = {}
 ns.Specs = Sp
 
 local FALLBACK_ICON = "Interface\\Icons\\INV_Misc_QuestionMark"
+-- Classic talent tree icons in tree order, used when the client gives no tree icon (WoW Forever).
+local I = "Interface\\Icons\\"
+local TREE_ICONS = {
+  WARRIOR = { I .. "Ability_Rogue_Eviscerate", I .. "Ability_Warrior_InnerRage", I .. "INV_Shield_06" },
+  PALADIN = { I .. "Spell_Holy_HolyBolt", I .. "Spell_Holy_DevotionAura", I .. "Spell_Holy_AuraOfLight" },
+  HUNTER  = { I .. "Ability_Hunter_BeastTaming", I .. "Ability_Marksmanship", I .. "Ability_Hunter_SwiftStrike" },
+  ROGUE   = { I .. "Ability_Rogue_Eviscerate", I .. "Ability_BackStab", I .. "Ability_Stealth" },
+  PRIEST  = { I .. "Spell_Holy_WordFortitude", I .. "Spell_Holy_HolyBolt", I .. "Spell_Shadow_ShadowWordPain" },
+  SHAMAN  = { I .. "Spell_Nature_Lightning", I .. "Spell_Nature_LightningShield", I .. "Spell_Nature_MagicImmunity" },
+  MAGE    = { I .. "Spell_Holy_MagicalSentry", I .. "Spell_Fire_FireBolt02", I .. "Spell_Frost_FrostBolt02" },
+  WARLOCK = { I .. "Spell_Shadow_DeathCoil", I .. "Spell_Shadow_Metamorphosis", I .. "Spell_Shadow_RainOfFire" },
+  DRUID   = { I .. "Spell_Nature_StarFall", I .. "Ability_Racial_BearForm", I .. "Spell_Nature_HealingTouch" },
+}
+-- Role icons by weight key, last fallback (classes/specs without a tree icon above).
+local ROLE_ICONS = {
+  INT_HEAL = "Interface\\Icons\\Spell_Holy_FlashHeal",
+  STR_TANK = "Interface\\Icons\\Ability_Warrior_DefensiveStance",
+  AGI_TANK = "Interface\\Icons\\Ability_Racial_BearForm",
+  STR_DPS  = "Interface\\Icons\\Ability_MeleeDamage",
+  AGI_DPS  = "Interface\\Icons\\Ability_Rogue_Eviscerate",
+  INT_DPS  = "Interface\\Icons\\Spell_Fire_FireBolt02",
+}
 local cache
 
 -- Name and icon of spec/talent tree i on every client.
@@ -44,7 +66,11 @@ function Sp.List()
   for i = 1, #list do
     local weights, key = ns.Weights.Get(class, i)
     local name, icon = Info(i)
-    cache[i] = { index = i, key = key, weights = weights, name = name or L["ARCH_" .. key], icon = icon or FALLBACK_ICON,
+    if icon == 0 or icon == "" then icon = nil end
+    if name == "" then name = nil end
+    cache[i] = { index = i, key = key, weights = weights, name = name or L["ARCH_" .. key],
+      icon = icon or (not C.isRetail and #list == 3 and TREE_ICONS[class] and TREE_ICONS[class][i])
+        or ROLE_ICONS[key] or FALLBACK_ICON,
       active = i == active }
   end
   return cache

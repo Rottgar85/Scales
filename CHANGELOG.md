@@ -1,5 +1,17 @@
 # Scales Changelog
 
+## 0.1.4
+
+**English**
+- WoW Forever: the spec bar shows the talent tree icons instead of a question mark
+- WoW Forever: druids have 3 talent trees again (Restoration was rated as a bear tank)
+- Logo and bag arrows are no longer shown upside down on some clients
+
+**Deutsch**
+- WoW Forever: Die Spezialisierungs-Leiste zeigt die Talentbaum-Symbole statt eines Fragezeichens
+- WoW Forever: Druiden haben wieder 3 Talentbäume (Wiederherstellung wurde als Bär-Tank bewertet)
+- Logo und Taschenpfeile stehen auf manchen Clients nicht mehr auf dem Kopf
+
 ## 0.1.3
 
 **English**

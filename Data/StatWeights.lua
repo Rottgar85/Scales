@@ -43,7 +43,8 @@ local classic = {
   MAGE    = { "INT_DPS", "INT_DPS", "INT_DPS" },
   WARLOCK = { "INT_DPS", "INT_DPS", "INT_DPS" },
   MONK    = { "AGI_TANK", "INT_HEAL", "AGI_DPS" },
-  DRUID   = (GetSpecialization and { "INT_DPS", "AGI_DPS", "AGI_TANK", "INT_HEAL" }) or { "INT_DPS", "AGI_DPS", "INT_HEAL" },
+  -- Mists has 4 druid specs; Forever has GetSpecialization (Midnight client) but only 3 classic trees.
+  DRUID   = (GetSpecialization and not C.isForever and { "INT_DPS", "AGI_DPS", "AGI_TANK", "INT_HEAL" }) or { "INT_DPS", "AGI_DPS", "INT_HEAL" },
 }
 W.specMap = C.isRetail and retail or classic
 
